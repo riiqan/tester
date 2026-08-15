@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+    <title>My Learning - USP Notes Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet"/>
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255,255,255,0.92);
+            --bg-hero: linear-gradient(135deg, #6C63FF, #4A47B0);
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #6a6a8a;
+            --border-color: #e8e8f0;
+            --border-hover: #d0d0e0;
+            --shadow: 0 4px 24px rgba(0,0,0,0.04);
+            --footer-bg: #1a1a2e;
+            --footer-text: #8a8aaa;
+            --nav-link-color: #4a4a6a;
+            --nav-link-hover: #1a1a2e;
+            --file-upload-border: #e0e0e8;
+            --file-upload-hover: #f8f7ff;
+            --btn-gradient: linear-gradient(135deg, #6C63FF, #4A47B0);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #12121e;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #1a1a2e;
+            --bg-nav: rgba(26,26,46,0.92);
+            --bg-hero: linear-gradient(135deg, #4A47B0, #2a2a5e);
+            --text-primary: #e8e8f0;
+            --text-secondary: #a8a8c0;
+            --text-muted: #8a8aaa;
+            --border-color: #2a2a4e;
+            --border-hover: #3a3a5e;
+            --shadow: 0 4px 24px rgba(0,0,0,0.2);
+            --footer-bg: #0a0a14;
+            --footer-text: #6a6a8a;
+            --nav-link-color: #a8a8c0;
+            --nav-link-hover: #e8e8f0;
+            --file-upload-border: #2a2a4e;
+            --file-upload-hover: #1a1a3e;
+        }
+
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg-primary); color: var(--text-primary); transition: background 0.3s ease, color 0.3s ease; }
+        a { text-decoration: none !important; }
+
+        .navbar-custom { 
+            background: var(--bg-nav); 
+            backdrop-filter: blur(16px); 
+            padding: 12px 0; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 2px solid rgba(108,99,255,0.06);
+            transition: background 0.3s ease;
+            min-height: 64px;
+        }
+        .navbar-custom .brand { 
+            font-weight: 800; 
+            font-size: 1.2rem; 
+            color: var(--text-primary); 
+            transition: 0.3s;
+            text-decoration: none !important;
+        }
+        .navbar-custom .brand:hover { color: #6C63FF; }
+        .navbar-custom .brand i { color: #6C63FF; margin-right: 8px; }
+
+        .nav-links { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .nav-links a { 
+            padding: 8px 16px; 
+            border-radius: 10px; 
+            font-weight: 500; 
+            font-size: 0.85rem; 
+            color: var(--nav-link-color); 
+            transition: 0.3s; 
+            text-decoration: none !important;
+        }
+        .nav-links a:hover { background: rgba(108,99,255,0.08); color: var(--nav-link-hover); }
+        .nav-links a i { margin-right: 6px; }
+        .nav-links a.active { background: rgba(108,99,255,0.08); color: #6C63FF; }
+
+        .btn-upload-nav { 
+            background: var(--btn-gradient) !important; 
+            color: white !important; 
+            padding: 8px 20px !important; 
+            border-radius: 12px !important; 
+            font-weight: 600 !important; 
+            transition: all 0.3s ease !important; 
+            border: none !important;
+            font-size: 0.85rem !important;
+            text-decoration: none !important;
+        }
+        .btn-upload-nav:hover { transform: translateY(-2px) !important; box-shadow: 0 4px 16px rgba(108,99,255,0.25) !important; background: linear-gradient(135deg, #5a52d5, #3a37a0) !important; color: white !important; }
+
+        .dark-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: rgba(108,99,255,0.06);
+            transition: 0.3s;
+            border: none;
+            color: var(--nav-link-color);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .dark-toggle:hover { background: rgba(108,99,255,0.12); }
+        .dark-toggle .toggle-icon { font-size: 1.1rem; }
+
+        .page-hero { background: var(--bg-hero); color: white; padding: 40px 0 30px; text-align: center; }
+        .page-hero h1 { font-weight: 800; font-size: 2rem; }
+        .page-hero p { opacity: 0.9; font-size: 1.05rem; max-width: 600px; margin: 8px auto 0; }
+
+        .learning-card { background: var(--bg-card); border-radius: 20px; padding: 32px; border: 2px solid var(--border-color); max-width: 720px; margin: 0 auto; transition: all 0.3s ease; }
+        .learning-card:hover { border-color: var(--border-hover); }
+
+        .form-control { border-radius: 10px; border: 2px solid var(--border-color); padding: 10px 14px; background: var(--bg-secondary); color: var(--text-primary); transition: 0.3s; }
+        .form-control:focus { border-color: #6C63FF; box-shadow: 0 0 0 4px rgba(108,99,255,0.08); }
+        .form-control::placeholder { color: var(--text-muted); }
+
+        .file-upload-area { border: 2px dashed var(--file-upload-border); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .file-upload-area:hover { border-color: #6C63FF; background: var(--file-upload-hover); }
+        .file-upload-area .icon { font-size: 2rem; color: #6C63FF; }
+
+        .btn-generate { background: var(--btn-gradient); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 600; transition: all 0.3s ease; width: 100%; font-size: 1rem; }
+        .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,99,255,0.25); color: white; }
+        .btn-generate:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .btn-download-plan {
+            background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+            color: white !important;
+            border: none !important;
+            padding: 6px 16px !important;
+            border-radius: 8px !important;
+            font-weight: 500 !important;
+            font-size: 0.8rem !important;
+            transition: all 0.3s ease !important;
+            display: inline-block !important;
+            width: auto !important;
+            margin-top: 8px !important;
+            text-decoration: none !important;
+        }
+        .btn-download-plan:hover { transform: translateY(-1px) !important; box-shadow: 0 4px 12px rgba(46,204,113,0.3) !important; color: white !important; }
+        .btn-download-plan i { margin-right: 6px; }
+
+        .plan-output { 
+            background: var(--bg-secondary); 
+            border-radius: 12px; 
+            padding: 24px; 
+            border: 1px solid var(--border-color); 
+            margin-top: 20px; 
+            max-height: 600px; 
+            overflow-y: auto; 
+            font-size: 0.9rem; 
+            line-height: 1.8; 
+            color: var(--text-primary); 
+            display: none;
+            white-space: pre-wrap;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .plan-output.show { display: block; }
+        .plan-output .loading-text { color: var(--text-muted); font-style: italic; }
+
+        .download-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer { background: var(--footer-bg); color: var(--footer-text); padding: 30px 0; margin-top: 40px; text-align: center; border-top: 1px solid #2a2a4e; }
+        .footer a { color: #6C63FF; transition: 0.3s; text-decoration: none !important; }
+        .footer a:hover { color: #8a7fff; }
+
+        @media (max-width: 768px) {
+            .page-hero h1 { font-size: 1.6rem; }
+            .page-hero p { font-size: 0.9rem; }
+            .learning-card { padding: 20px; }
+            .nav-links a { font-size: 0.8rem; padding: 6px 12px; }
+            .navbar-custom .brand { font-size: 1rem; }
+            .dark-toggle .toggle-text { display: none; }
+            .file-upload-area { padding: 16px; }
+            .btn-download-plan { font-size: 0.7rem !important; padding: 4px 12px !important; }
+        }
+        @media (max-width: 480px) {
+            .page-hero h1 { font-size: 1.3rem; }
+            .learning-card { padding: 16px; }
+            .nav-links a { font-size: 0.7rem; padding: 4px 10px; }
+            .btn-upload-nav { font-size: 0.7rem !important; padding: 4px 12px !important; }
+            .plan-output { font-size: 0.8rem; padding: 12px; max-height: 350px; }
+            .file-upload-area { padding: 12px; }
+            .file-upload-area .icon { font-size: 1.5rem; }
+            .btn-generate { font-size: 0.85rem; padding: 10px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar-custom">
+    <div class="container d-flex justify-content-between align-items-center">
+        <a href="index.html" class="brand"><i class="bi bi-mortarboard-fill"></i> USP Notes</a>
+        <div class="nav-links">
+            <a href="index.html"><i class="bi bi-house"></i> Home</a>
+            <a href="mylearning.html" class="active"><i class="bi bi-brain"></i> My Learning</a>
+            <a href="leaderboard.html"><i class="bi bi-trophy"></i> Leaderboard</a>
+            <button class="dark-toggle" onclick="toggleDarkMode()" id="darkToggle">
+                <span class="toggle-icon" id="toggleIcon">🌙</span>
+                <span class="toggle-text" id="toggleText">Dark</span>
+            </button>
+            <a href="upload.html" class="btn-upload-nav"><i class="bi bi-cloud-upload"></i> Upload</a>
+        </div>
+    </div>
+</nav>
+
+<section class="page-hero">
+    <div class="container">
+        <h1>🧠 My Learning</h1>
+        <p>Get a personalized AI-powered study plan tailored to your courses and goals</p>
+    </div>
+</section>
+
+<div class="container py-4">
+    <div class="learning-card">
+        <h4 class="fw-bold mb-3"><i class="bi bi-person-gear text-primary"></i> Your Study Profile</h4>
+        <p class="text-muted" style="font-size:0.9rem;">Fill in your details and upload relevant materials for a personalized study plan.</p>
+
+        <form id="learningForm">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Full Name</label>
+                    <input type="text" id="studentName" class="form-control" placeholder="Enter your full name" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Student ID</label>
+                    <input type="text" id="studentId" class="form-control" placeholder="e.g., S11251109" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Course/Subject</label>
+                    <input type="text" id="studentCourse" class="form-control" placeholder="e.g., CS101, MA201" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Semester</label>
+                    <select id="studentSemester" class="form-control">
+                        <option value="Semester 1">Semester 1</option>
+                        <option value="Semester 2">Semester 2</option>
+                        <option value="Summer School">Summer School</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Study Hours/Week</label>
+                    <input type="number" id="studyHours" class="form-control" placeholder="e.g., 15" min="1" max="60" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Target Grade</label>
+                    <select id="targetGrade" class="form-control">
+                        <option value="A+">A+ (90%+)</option>
+                        <option value="A">A (80-89%)</option>
+                        <option value="B">B (70-79%)</option>
+                        <option value="C">C (60-69%)</option>
+                        <option value="D">D (50-59%)</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Current Understanding</label>
+                    <select id="currentLevel" class="form-control">
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate" selected>Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Topics to Focus On</label>
+                    <textarea id="focusTopics" class="form-control" rows="2" placeholder="List topics you find challenging, separated by commas..."></textarea>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label fw-bold">Upload Study Material (Optional)</label>
+                    <div class="file-upload-area" onclick="document.getElementById('planFileInput').click()">
+                        <div class="icon"><i class="bi bi-file-earmark-pdf"></i></div>
+                        <p class="mt-2" style="color: var(--text-primary); font-size:0.9rem;"><strong>Click to upload</strong> or drag and drop</p>
+                        <small class="text-muted" style="color: var(--text-muted); font-size:0.75rem;">PDF, PPTX, DOCX, TXT files accepted</small>
+                        <input type="file" id="planFileInput" accept=".pdf,.pptx,.ppt,.docx,.txt" style="display:none">
+                        <div id="planFileName" class="text-success mt-2" style="font-size:0.85rem;"></div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn-generate" id="generateBtn">
+                        <i class="bi bi-magic"></i> Generate Study Plan
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div id="planOutput" class="plan-output">
+            <div id="planContent"></div>
+            <div class="download-row">
+                <button class="btn-download-plan" id="downloadPlanBtn" style="display:none;" onclick="downloadPlan()">
+                    <i class="bi bi-download"></i> Download Study Guide
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2026 USP Notes Marketplace · Made with ❤️ for USP students</p>
+    </div>
+</footer>
+
+<script>
+const API_URL = 'http://localhost:5000';
+let planFileContent = '';
+let currentPlanText = '';
+
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateToggleIcon(newTheme);
+}
+
+function updateToggleIcon(theme) {
+    const icon = document.getElementById('toggleIcon');
+    const text = document.getElementById('toggleText');
+    if (theme === 'dark') { icon.textContent = '☀️'; text.textContent = 'Light'; } 
+    else { icon.textContent = '🌙'; text.textContent = 'Dark'; }
+}
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateToggleIcon(savedTheme);
+}
+
+document.getElementById('planFileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        document.getElementById('planFileName').textContent = `✅ ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            planFileContent = event.target.result;
+        };
+        reader.readAsText(file);
+    }
+});
+
+document.getElementById('learningForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const btn = document.getElementById('generateBtn');
+    const output = document.getElementById('planOutput');
+    const content = document.getElementById('planContent');
+    const downloadBtn = document.getElementById('downloadPlanBtn');
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Generating...';
+    output.classList.add('show');
+    downloadBtn.style.display = 'none';
+    content.innerHTML = '<div class="loading-text">⏳ AI is analyzing your profile and creating a personalized study plan...</div>';
+
+    const data = {
+        name: document.getElementById('studentName').value,
+        id: document.getElementById('studentId').value,
+        course: document.getElementById('studentCourse').value,
+        semester: document.getElementById('studentSemester').value,
+        hours: document.getElementById('studyHours').value,
+        target: document.getElementById('targetGrade').value,
+        level: document.getElementById('currentLevel').value,
+        topics: document.getElementById('focusTopics').value,
+        file_content: planFileContent || ''
+    };
+
+    try {
+        const response = await fetch(API_URL + '/api/generate-study-plan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.plan) {
+            currentPlanText = result.plan;
+            content.innerHTML = result.plan;
+            downloadBtn.style.display = 'inline-block';
+        } else {
+            content.innerHTML = '❌ Sorry, there was an error generating your study plan. Please try again.';
+        }
+    } catch (error) {
+        content.innerHTML = '❌ Connection error: ' + error.message;
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-magic"></i> Generate Study Plan';
+});
+
+function downloadPlan() {
+    if (!currentPlanText) return;
+
+    const blob = new Blob([currentPlanText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const name = document.getElementById('studentName').value || 'Student';
+    a.href = url;
+    a.download = `Study_Plan_${name.replace(/\s+/g, '_')}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+loadTheme();
+</script>
+</body>
+</html>

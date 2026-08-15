@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+    <title>Upload - USP Notes Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet"/>
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255,255,255,0.92);
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #6a6a8a;
+            --border-color: #e8e8f0;
+            --border-hover: #d0d0e0;
+            --shadow: 0 4px 24px rgba(0,0,0,0.04);
+            --file-upload-border: #e0e0e8;
+            --file-upload-hover: #f8f7ff;
+            --footer-bg: #1a1a2e;
+            --footer-text: #8a8aaa;
+            --toggle-bg: #ddd;
+            --toggle-active: #6C63FF;
+            --section-bg: #f8f9fe;
+            --section-border: #e8e8f0;
+            --msg-success-bg: #d4edda;
+            --msg-success-text: #155724;
+            --msg-error-bg: #f8d7da;
+            --msg-error-text: #721c24;
+            --msg-loading-bg: #fff3cd;
+            --msg-loading-text: #856404;
+            --form-control-bg: #ffffff;
+            --nav-link-color: #4a4a6a;
+            --nav-link-hover: #1a1a2e;
+            --tab-active: #6C63FF;
+            --tab-inactive: #4a4a6a;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #12121e;
+            --bg-card: #1a1a2e;
+            --bg-nav: rgba(26,26,46,0.92);
+            --text-primary: #e8e8f0;
+            --text-secondary: #a8a8c0;
+            --text-muted: #8a8aaa;
+            --border-color: #2a2a4e;
+            --border-hover: #3a3a5e;
+            --shadow: 0 4px 24px rgba(0,0,0,0.2);
+            --file-upload-border: #2a2a4e;
+            --file-upload-hover: #1a1a3e;
+            --footer-bg: #0a0a14;
+            --footer-text: #6a6a8a;
+            --toggle-bg: #3a3a5e;
+            --toggle-active: #6C63FF;
+            --section-bg: #1a1a2e;
+            --section-border: #2a2a4e;
+            --msg-success-bg: #0a2e1a;
+            --msg-success-text: #2ecc71;
+            --msg-error-bg: #2e0a0a;
+            --msg-error-text: #e74c3c;
+            --msg-loading-bg: #2e1a0a;
+            --msg-loading-text: #f39c12;
+            --form-control-bg: #1a1a2e;
+            --nav-link-color: #a8a8c0;
+            --nav-link-hover: #e8e8f0;
+            --tab-active: #6C63FF;
+            --tab-inactive: #8a8aaa;
+        }
+
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg-primary); color: var(--text-primary); transition: background 0.3s ease, color 0.3s ease; }
+        
+        .navbar-custom { 
+            background: var(--bg-nav); 
+            backdrop-filter: blur(16px); 
+            padding: 10px 0; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 2px solid rgba(108,99,255,0.06);
+            transition: background 0.3s ease;
+            min-height: 60px;
+        }
+        .navbar-custom .brand { 
+            font-weight: 800; 
+            font-size: 1.1rem; 
+            color: var(--text-primary); 
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .navbar-custom .brand:hover { color: #6C63FF; }
+        .navbar-custom .brand i { color: #6C63FF; margin-right: 6px; }
+        
+        .nav-links { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+        .nav-links a { 
+            padding: 6px 12px; 
+            border-radius: 8px; 
+            font-weight: 500; 
+            font-size: 0.8rem; 
+            color: var(--nav-link-color); 
+            text-decoration: none;
+            transition: 0.3s; 
+        }
+        .nav-links a:hover { background: rgba(108,99,255,0.08); color: var(--nav-link-hover); }
+        .nav-links a i { margin-right: 4px; }
+        
+        .dark-toggle {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(108,99,255,0.06);
+            transition: 0.3s;
+            border: none;
+            color: var(--nav-link-color);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .dark-toggle:hover { background: rgba(108,99,255,0.12); }
+        .dark-toggle .toggle-icon { font-size: 1rem; }
+        .dark-toggle .toggle-text { font-size: 0.65rem; }
+        
+        .upload-card { 
+            background: var(--bg-card); 
+            border-radius: 20px; 
+            padding: 24px; 
+            box-shadow: var(--shadow); 
+            max-width: 700px; 
+            margin: 0 auto; 
+            border: 2px solid var(--border-color); 
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .upload-card:hover { border-color: var(--border-hover); }
+        
+        .upload-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        .tab-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: var(--tab-inactive);
+        }
+        .tab-btn:hover {
+            background: rgba(108,99,255,0.06);
+            color: var(--tab-active);
+        }
+        .tab-btn.active {
+            background: rgba(108,99,255,0.1);
+            color: var(--tab-active);
+        }
+        .tab-btn i { margin-right: 6px; }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .file-upload-area { 
+            border: 2px dashed var(--file-upload-border); 
+            border-radius: 14px; 
+            padding: 24px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+        }
+        .file-upload-area:hover { border-color: #6C63FF; background: var(--file-upload-hover); }
+        .file-upload-area .icon { font-size: 2rem; color: #6C63FF; }
+        
+        .btn-upload-submit { 
+            background: linear-gradient(135deg, #6C63FF, #4A47B0) !important; 
+            border: none !important; 
+            padding: 10px 20px !important; 
+            border-radius: 10px !important; 
+            font-weight: 600 !important; 
+            transition: all 0.3s ease !important; 
+            color: white !important; 
+            width: 100% !important;
+            cursor: pointer !important;
+            font-size: 0.95rem !important;
+        }
+        .btn-upload-submit:hover { 
+            transform: translateY(-2px) !important; 
+            box-shadow: 0 4px 16px rgba(108,99,255,0.25) !important; 
+            background: linear-gradient(135deg, #5a52d5, #3a37a0) !important; 
+            color: white !important;
+        }
+        .btn-upload-submit:active { transform: scale(0.97) !important; }
+        .btn-upload-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            padding: 8px 12px;
+            transition: 0.3s;
+            background: var(--form-control-bg);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        .form-control:focus {
+            border-color: #6C63FF;
+            box-shadow: 0 0 0 3px rgba(108,99,255,0.08);
+        }
+        .form-control::placeholder { color: var(--text-muted); }
+        label { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
+        
+        .footer { 
+            background: var(--footer-bg); 
+            color: var(--footer-text); 
+            padding: 20px 0; 
+            margin-top: 30px; 
+            text-align: center; 
+            border-top: 1px solid #2a2a4e; 
+            transition: background 0.3s ease;
+        }
+        .footer p { font-size: 0.8rem; margin-bottom: 4px; }
+        .footer a { color: #6C63FF; text-decoration: none; transition: 0.3s; }
+        .footer a:hover { color: #8a7fff; }
+        
+        .collection-section {
+            background: var(--section-bg);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 1px solid var(--section-border);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .collection-section .toggle-label { font-weight: 600; font-size: 0.85rem; color: var(--text-primary); }
+        .collection-section .toggle-sub { font-size: 0.7rem; color: var(--text-muted); }
+        
+        .toggle-switch {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            background: var(--toggle-bg);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex-shrink: 0;
+        }
+        .toggle-switch.active { background: var(--toggle-active); }
+        .toggle-switch .slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .toggle-switch.active .slider { transform: translateX(18px); }
+        .collection-select { display: none; margin-top: 10px; }
+        .collection-select.show { display: block; }
+        
+        .collection-exists-msg {
+            font-size: 0.8rem;
+            padding: 6px 10px;
+            border-radius: 8px;
+            margin-top: 6px;
+        }
+        .collection-exists-msg.exists { background: var(--msg-loading-bg); color: var(--msg-loading-text); }
+        .collection-exists-msg.new { background: var(--msg-success-bg); color: var(--msg-success-text); }
+        
+        @media (max-width: 768px) {
+            .upload-card { padding: 16px; }
+            .file-upload-area { padding: 16px; }
+            .file-upload-area .icon { font-size: 1.6rem; }
+            .nav-links a { font-size: 0.7rem; padding: 4px 10px; }
+            .navbar-custom .brand { font-size: 1rem; }
+            .dark-toggle .toggle-text { display: none; }
+            .btn-upload-submit { font-size: 0.85rem !important; padding: 8px 16px !important; }
+            .upload-card h3 { font-size: 1.2rem; }
+            .tab-btn { font-size: 0.75rem; padding: 6px 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar-custom">
+    <div class="container d-flex justify-content-between align-items-center">
+        <a href="index.html" class="brand"><i class="bi bi-mortarboard-fill"></i> USP Notes</a>
+        <div class="nav-links">
+            <a href="index.html"><i class="bi bi-house"></i> <span class="d-none d-sm-inline">Home</span></a>
+            <a href="quizzes.html"><i class="bi bi-question-circle"></i> <span class="d-none d-sm-inline">Quizzes</span></a>
+            <button class="dark-toggle" onclick="toggleDarkMode()" id="darkToggle">
+                <span class="toggle-icon" id="toggleIcon">🌙</span>
+                <span class="toggle-text" id="toggleText">Dark</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-3">
+    <div class="upload-card">
+        <h3 class="mb-1 fw-bold" style="color: var(--text-primary);"><i class="bi bi-cloud-upload text-primary"></i> Upload</h3>
+        <p class="text-muted" style="color: var(--text-muted); font-size:0.9rem;">Upload lecture materials and get AI-generated study notes or quizzes.</p>
+
+        <!-- ===== TABS ===== -->
+        <div class="upload-tabs">
+            <button class="tab-btn active" onclick="switchTab('notes')" id="notesTab">
+                <i class="bi bi-file-text"></i> Notes
+            </button>
+            <button class="tab-btn" onclick="switchTab('quiz')" id="quizTab">
+                <i class="bi bi-question-circle"></i> Quiz
+            </button>
+        </div>
+
+        <!-- ===== NOTES TAB ===== -->
+        <div class="tab-content active" id="notesTabContent">
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="title" class="form-control" placeholder="Enter a title">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Course Code</label>
+                    <input type="text" id="courseCode" class="form-control" placeholder="e.g., CS101">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea id="description" class="form-control" rows="2" placeholder="Brief description"></textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Tags</label>
+                    <input type="text" id="tags" class="form-control" placeholder="comma, separated, tags">
+                </div>
+                
+                <div class="col-12">
+                    <div class="collection-section">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="toggle-switch" id="collectionToggle" onclick="toggleCollection()">
+                                <div class="slider"></div>
+                            </div>
+                            <div>
+                                <div class="toggle-label">Add to Collection</div>
+                                <div class="toggle-sub">Organize notes into collections</div>
+                            </div>
+                        </div>
+                        <div class="collection-select" id="collectionSelect">
+                            <label class="form-label fw-bold" style="color: var(--text-primary); font-size:0.8rem;">Collection Name</label>
+                            <input type="text" id="collectionName" class="form-control" placeholder="Enter collection name...">
+                            <div id="collectionStatus" class="collection-exists-msg" style="display:none;"></div>
+                            <div class="mt-1">
+                                <small class="text-muted" style="color: var(--text-muted); font-size:0.7rem;">💡 If collection exists, note will be added to it.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <label class="form-label">Upload File</label>
+                    <div class="file-upload-area" onclick="document.getElementById('fileInput').click()">
+                        <div class="icon"><i class="bi bi-file-earmark-pdf"></i></div>
+                        <p class="mt-1" style="color: var(--text-primary); font-size:0.9rem;"><strong>Click to upload</strong> or drag and drop</p>
+                        <small class="text-muted" style="color: var(--text-muted); font-size:0.7rem;">PDF, PPTX, DOCX, TXT files accepted</small>
+                        <input type="file" id="fileInput" accept=".pdf,.pptx,.ppt,.docx,.txt" style="display:none">
+                        <div id="fileName" class="text-success mt-1" style="font-size:0.8rem;"></div>
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <button class="btn-upload-submit" id="uploadBtn" onclick="uploadNotes()">
+                        <i class="bi bi-cloud-upload"></i> Upload & Generate Notes
+                    </button>
+                    <div id="uploadMsg" class="msg" style="padding:10px;border-radius:10px;margin-top:12px;display:none;font-size:0.9rem;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== QUIZ TAB ===== -->
+        <div class="tab-content" id="quizTabContent">
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <label class="form-label">Quiz Title</label>
+                    <input type="text" id="quizTitle" class="form-control" placeholder="Enter quiz title">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Course Code</label>
+                    <input type="text" id="quizCourseCode" class="form-control" placeholder="e.g., CS101">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea id="quizDescription" class="form-control" rows="2" placeholder="Brief description"></textarea>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Difficulty</label>
+                    <select id="quizDifficulty" class="form-control">
+                        <option value="easy">🟢 Easy</option>
+                        <option value="medium" selected>🟡 Medium</option>
+                        <option value="hard">🔴 Hard</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Number of Questions</label>
+                    <input type="number" id="quizNumQuestions" class="form-control" value="10" min="3" max="30">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Tags</label>
+                    <input type="text" id="quizTags" class="form-control" placeholder="comma, separated, tags">
+                </div>
+                
+                <div class="col-12">
+                    <div class="collection-section">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="toggle-switch" id="quizCollectionToggle" onclick="toggleQuizCollection()">
+                                <div class="slider"></div>
+                            </div>
+                            <div>
+                                <div class="toggle-label">Add to Collection</div>
+                                <div class="toggle-sub">Organize quizzes into collections</div>
+                            </div>
+                        </div>
+                        <div class="collection-select" id="quizCollectionSelect">
+                            <label class="form-label fw-bold" style="color: var(--text-primary); font-size:0.8rem;">Collection Name</label>
+                            <input type="text" id="quizCollectionName" class="form-control" placeholder="Enter collection name...">
+                            <div id="quizCollectionStatus" class="collection-exists-msg" style="display:none;"></div>
+                            <div class="mt-1">
+                                <small class="text-muted" style="color: var(--text-muted); font-size:0.7rem;">💡 If collection exists, quiz will be added to it.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <label class="form-label">Upload File</label>
+                    <div class="file-upload-area" onclick="document.getElementById('quizFileInput').click()">
+                        <div class="icon"><i class="bi bi-file-earmark-pdf"></i></div>
+                        <p class="mt-1" style="color: var(--text-primary); font-size:0.9rem;"><strong>Click to upload</strong> or drag and drop</p>
+                        <small class="text-muted" style="color: var(--text-muted); font-size:0.7rem;">PDF, PPTX, DOCX, TXT files accepted</small>
+                        <input type="file" id="quizFileInput" accept=".pdf,.pptx,.ppt,.docx,.txt" style="display:none">
+                        <div id="quizFileName" class="text-success mt-1" style="font-size:0.8rem;"></div>
+                    </div>
+                </div>
+                
+                <div class="col-12">
+                    <button class="btn-upload-submit" id="quizUploadBtn" onclick="uploadQuiz()">
+                        <i class="bi bi-question-circle"></i> Upload & Generate Quiz
+                    </button>
+                    <div id="quizUploadMsg" class="msg" style="padding:10px;border-radius:10px;margin-top:12px;display:none;font-size:0.9rem;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2026 USP Notes Marketplace · Made with ❤️ for USP students</p>
+    </div>
+</footer>
+
+<script>
+const API_URL = 'http://localhost:5000';
+
+// ===== DARK MODE =====
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateToggleIcon(newTheme);
+}
+
+function updateToggleIcon(theme) {
+    const icon = document.getElementById('toggleIcon');
+    const text = document.getElementById('toggleText');
+    if (theme === 'dark') {
+        icon.textContent = '☀️';
+        text.textContent = 'Light';
+    } else {
+        icon.textContent = '🌙';
+        text.textContent = 'Dark';
+    }
+}
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateToggleIcon(savedTheme);
+}
+
+// ===== TAB SWITCHING =====
+function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tab + 'Tab').classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    document.getElementById(tab + 'TabContent').classList.add('active');
+}
+
+// ===== REDIRECT TO RESULT PAGE =====
+function redirectToResult(data, type) {
+    // Store data in localStorage
+    localStorage.setItem('uploadResult', JSON.stringify({
+        type: type,
+        data: data,
+        timestamp: new Date().toISOString()
+    }));
+    // Redirect to result page
+    window.location.href = 'upload-result.html';
+}
+
+// ===== NOTES COLLECTION =====
+function toggleCollection() {
+    const toggle = document.getElementById('collectionToggle');
+    const select = document.getElementById('collectionSelect');
+    toggle.classList.toggle('active');
+    select.classList.toggle('show');
+    if (select.classList.contains('show')) {
+        setTimeout(() => document.getElementById('collectionName').focus(), 100);
+    }
+}
+
+async function checkCollection(name) {
+    if (!name || name.length < 2) {
+        document.getElementById('collectionStatus').style.display = 'none';
+        return;
+    }
+    try {
+        const response = await fetch(API_URL + '/api/collections');
+        const collections = await response.json();
+        const exists = collections.some(c => c.name.toLowerCase() === name.toLowerCase());
+        const status = document.getElementById('collectionStatus');
+        status.style.display = 'block';
+        if (exists) {
+            status.className = 'collection-exists-msg exists';
+            status.innerHTML = `📁 Collection "<strong>${name}</strong>" exists. Note will be added.`;
+        } else {
+            status.className = 'collection-exists-msg new';
+            status.innerHTML = `✨ New collection "<strong>${name}</strong>" will be created.`;
+        }
+    } catch (error) {
+        console.error('Error checking collections:', error);
+    }
+}
+
+document.getElementById('collectionName').addEventListener('input', function() {
+    checkCollection(this.value);
+});
+
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        document.getElementById('fileName').textContent = `✅ ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+    }
+});
+
+// ===== NOTES UPLOAD =====
+async function uploadNotes() {
+    const file = document.getElementById('fileInput').files[0];
+    if (!file) {
+        const msg = document.getElementById('uploadMsg');
+        msg.className = 'msg error';
+        msg.style.display = 'block';
+        msg.textContent = '❌ Please select a file to upload.';
+        return;
+    }
+
+    const btn = document.getElementById('uploadBtn');
+    const msg = document.getElementById('uploadMsg');
+    
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Generating...';
+    msg.className = 'msg loading';
+    msg.style.display = 'block';
+    msg.textContent = '⏳ Uploading and generating notes...';
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('title', document.getElementById('title').value);
+    formData.append('course_code', document.getElementById('courseCode').value);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('tags', document.getElementById('tags').value);
+
+    const isCollection = document.getElementById('collectionToggle').classList.contains('active');
+    if (isCollection) {
+        const collectionName = document.getElementById('collectionName').value.trim();
+        if (collectionName) {
+            formData.append('collection', collectionName);
+        }
+    }
+
+    try {
+        const response = await fetch(API_URL + '/api/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            redirectToResult(result, 'note');
+        } else {
+            msg.className = 'msg error';
+            msg.style.display = 'block';
+            msg.textContent = '❌ Error: ' + (result.error || 'Upload failed');
+        }
+    } catch (error) {
+        msg.className = 'msg error';
+        msg.style.display = 'block';
+        msg.textContent = '❌ Connection error: ' + error.message;
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-cloud-upload"></i> Upload & Generate Notes';
+    }
+}
+
+// ===== QUIZ COLLECTION =====
+function toggleQuizCollection() {
+    const toggle = document.getElementById('quizCollectionToggle');
+    const select = document.getElementById('quizCollectionSelect');
+    toggle.classList.toggle('active');
+    select.classList.toggle('show');
+    if (select.classList.contains('show')) {
+        setTimeout(() => document.getElementById('quizCollectionName').focus(), 100);
+    }
+}
+
+async function checkQuizCollection(name) {
+    if (!name || name.length < 2) {
+        document.getElementById('quizCollectionStatus').style.display = 'none';
+        return;
+    }
+    try {
+        const response = await fetch(API_URL + '/api/collections');
+        const collections = await response.json();
+        const exists = collections.some(c => c.name.toLowerCase() === name.toLowerCase());
+        const status = document.getElementById('quizCollectionStatus');
+        status.style.display = 'block';
+        if (exists) {
+            status.className = 'collection-exists-msg exists';
+            status.innerHTML = `📁 Collection "<strong>${name}</strong>" exists. Quiz will be added.`;
+        } else {
+            status.className = 'collection-exists-msg new';
+            status.innerHTML = `✨ New collection "<strong>${name}</strong>" will be created.`;
+        }
+    } catch (error) {
+        console.error('Error checking collections:', error);
+    }
+}
+
+document.getElementById('quizCollectionName').addEventListener('input', function() {
+    checkQuizCollection(this.value);
+});
+
+document.getElementById('quizFileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        document.getElementById('quizFileName').textContent = `✅ ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+    }
+});
+
+// ===== QUIZ UPLOAD =====
+async function uploadQuiz() {
+    const file = document.getElementById('quizFileInput').files[0];
+    if (!file) {
+        const msg = document.getElementById('quizUploadMsg');
+        msg.className = 'msg error';
+        msg.style.display = 'block';
+        msg.textContent = '❌ Please select a file to upload.';
+        return;
+    }
+
+    const btn = document.getElementById('quizUploadBtn');
+    const msg = document.getElementById('quizUploadMsg');
+    
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Generating quiz...';
+    msg.className = 'msg loading';
+    msg.style.display = 'block';
+    msg.textContent = '⏳ Uploading and generating quiz...';
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('title', document.getElementById('quizTitle').value);
+    formData.append('course_code', document.getElementById('quizCourseCode').value);
+    formData.append('description', document.getElementById('quizDescription').value);
+    formData.append('difficulty', document.getElementById('quizDifficulty').value);
+    formData.append('num_questions', document.getElementById('quizNumQuestions').value);
+    formData.append('tags', document.getElementById('quizTags').value);
+
+    const isCollection = document.getElementById('quizCollectionToggle').classList.contains('active');
+    if (isCollection) {
+        const collectionName = document.getElementById('quizCollectionName').value.trim();
+        if (collectionName) {
+            formData.append('collection', collectionName);
+        }
+    }
+
+    try {
+        const response = await fetch(API_URL + '/api/quiz/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            redirectToResult(result, 'quiz');
+        } else {
+            msg.className = 'msg error';
+            msg.style.display = 'block';
+            msg.textContent = '❌ Error: ' + (result.error || 'Upload failed');
+        }
+    } catch (error) {
+        msg.className = 'msg error';
+        msg.style.display = 'block';
+        msg.textContent = '❌ Connection error: ' + error.message;
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-question-circle"></i> Upload & Generate Quiz';
+    }
+}
+
+loadTheme();
+</script>
+</body>
+</html>

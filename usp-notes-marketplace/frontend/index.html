@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+    <title>USP Notes Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet"/>
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255,255,255,0.92);
+            --bg-hero: linear-gradient(135deg, #6C63FF, #4A47B0);
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #6a6a8a;
+            --border-color: #e8e8f0;
+            --border-hover: #d0d0e0;
+            --shadow: 0 4px 24px rgba(0,0,0,0.04);
+            --shadow-hover: 0 12px 40px rgba(108,99,255,0.08);
+            --badge-tag: #eeedff;
+            --badge-tag-text: #6C63FF;
+            --badge-course: #1a1a2e;
+            --badge-course-text: white;
+            --badge-downloaded: #e6f9ee;
+            --badge-downloaded-text: #2ecc71;
+            --badge-collection: #e8f4fd;
+            --badge-collection-text: #3498db;
+            --scrollbar-track: #e8e8f0;
+            --scrollbar-thumb: #6C63FF;
+            --footer-bg: #1a1a2e;
+            --footer-text: #8a8aaa;
+            --collection-item: #ffffff;
+            --hero-text: #ffffff;
+            --toggle-bg: #ddd;
+            --toggle-active: #6C63FF;
+            --file-upload-border: #e0e0e8;
+            --file-upload-hover: #f8f7ff;
+            --stat-bg: rgba(255,255,255,0.10);
+            --stat-border: rgba(255,255,255,0.08);
+            --section-header-color: #1a1a2e;
+            --nav-link-color: #4a4a6a;
+            --nav-link-hover: #1a1a2e;
+            --search-bg: #ffffff;
+            --search-border: #e8e8f0;
+            --search-text: #1a1a2e;
+            --filter-bg: #ffffff;
+            --filter-text: #4a4a6a;
+            --filter-border: #e8e8f0;
+            --filter-active-bg: #6C63FF;
+            --filter-active-text: #ffffff;
+            --filter-hover-border: #6C63FF;
+            --filter-hover-text: #6C63FF;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #12121e;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #1a1a2e;
+            --bg-nav: rgba(26,26,46,0.92);
+            --bg-hero: linear-gradient(135deg, #4A47B0, #2a2a5e);
+            --text-primary: #e8e8f0;
+            --text-secondary: #a8a8c0;
+            --text-muted: #8a8aaa;
+            --border-color: #2a2a4e;
+            --border-hover: #3a3a5e;
+            --shadow: 0 4px 24px rgba(0,0,0,0.2);
+            --shadow-hover: 0 12px 40px rgba(108,99,255,0.15);
+            --badge-tag: #2a2a4e;
+            --badge-tag-text: #8a7fff;
+            --badge-course: #2a2a4e;
+            --badge-course-text: #e8e8f0;
+            --badge-downloaded: #0a2e1a;
+            --badge-downloaded-text: #2ecc71;
+            --badge-collection: #0a1a2e;
+            --badge-collection-text: #3498db;
+            --scrollbar-track: #2a2a4e;
+            --scrollbar-thumb: #6C63FF;
+            --footer-bg: #0a0a14;
+            --footer-text: #6a6a8a;
+            --collection-item: #1a1a2e;
+            --hero-text: #e8e8f0;
+            --toggle-bg: #3a3a5e;
+            --toggle-active: #6C63FF;
+            --file-upload-border: #2a2a4e;
+            --file-upload-hover: #1a1a3e;
+            --stat-bg: rgba(255,255,255,0.04);
+            --stat-border: rgba(255,255,255,0.04);
+            --section-header-color: #e8e8f0;
+            --nav-link-color: #a8a8c0;
+            --nav-link-hover: #e8e8f0;
+            --search-bg: #1a1a2e;
+            --search-border: #2a2a4e;
+            --search-text: #e8e8f0;
+            --filter-bg: #1a1a2e;
+            --filter-text: #a8a8c0;
+            --filter-border: #2a2a4e;
+            --filter-active-bg: #6C63FF;
+            --filter-active-text: #ffffff;
+            --filter-hover-border: #6C63FF;
+            --filter-hover-text: #8a7fff;
+        }
+
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg-primary); color: var(--text-primary); transition: background 0.3s ease, color 0.3s ease; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        a { text-decoration: none !important; }
+        img { max-width: 100%; height: auto; }
+        
+        /* ===== NAVBAR - NO UNDERLINE ===== */
+        .navbar-custom { 
+            background: var(--bg-nav); 
+            backdrop-filter: blur(16px); 
+            padding: 12px 0; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 2px solid rgba(108,99,255,0.06);
+            transition: background 0.3s ease;
+            min-height: 64px;
+        }
+        .navbar-custom .brand { 
+            font-weight: 800; 
+            font-size: 1.2rem; 
+            color: var(--text-primary); 
+            transition: 0.3s;
+            text-decoration: none !important;
+        }
+        .navbar-custom .brand:hover { color: #6C63FF; }
+        .navbar-custom .brand i { color: #6C63FF; margin-right: 8px; }
+        
+        .nav-links { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .nav-links a { 
+            padding: 8px 16px; 
+            border-radius: 10px; 
+            font-weight: 500; 
+            font-size: 0.85rem; 
+            color: var(--nav-link-color); 
+            transition: 0.3s; 
+            text-decoration: none !important;
+        }
+        .nav-links a:hover { background: rgba(108,99,255,0.08); color: var(--nav-link-hover); }
+        .nav-links a i { margin-right: 6px; }
+        .nav-links a.active { background: rgba(108,99,255,0.08); color: #6C63FF; }
+        
+        .btn-upload-nav { 
+            background: linear-gradient(135deg, #6C63FF, #4A47B0) !important; 
+            color: white !important; 
+            padding: 8px 20px !important; 
+            border-radius: 12px !important; 
+            font-weight: 600 !important; 
+            transition: all 0.3s ease !important; 
+            border: none !important;
+            font-size: 0.85rem !important;
+            text-decoration: none !important;
+        }
+        .btn-upload-nav:hover { 
+            transform: translateY(-2px) !important; 
+            box-shadow: 0 4px 16px rgba(108,99,255,0.25) !important; 
+            background: linear-gradient(135deg, #5a52d5, #3a37a0) !important; 
+            color: white !important;
+            text-decoration: none !important;
+        }
+        
+        .dark-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: rgba(108,99,255,0.06);
+            transition: 0.3s;
+            border: none;
+            color: var(--nav-link-color);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-decoration: none !important;
+        }
+        .dark-toggle:hover { background: rgba(108,99,255,0.12); }
+        .dark-toggle .toggle-icon { font-size: 1.1rem; }
+        .dark-toggle .toggle-text { font-size: 0.7rem; }
+        
+        /* ===== REST OF THE STYLES REMAIN THE SAME ===== */
+        .hero { 
+            background: var(--bg-hero); 
+            color: var(--hero-text); 
+            padding: 60px 0 50px; 
+            position: relative; 
+            overflow: hidden; 
+            transition: background 0.3s ease;
+        }
+        .hero::before { 
+            content: ''; 
+            position: absolute; 
+            top: -50%; 
+            right: -20%; 
+            width: 600px; 
+            height: 600px; 
+            background: rgba(255,255,255,0.04); 
+            border-radius: 50%; 
+            animation: float 8s ease-in-out infinite; 
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.05); } }
+        .hero h1 { font-weight: 900; font-size: 3rem; letter-spacing: -1.5px; position: relative; z-index: 1; line-height: 1.15; }
+        .hero .lead { font-weight: 300; font-size: 1.15rem; opacity: 0.92; position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+        
+        .stats-row { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-top: 30px; position: relative; z-index: 1; }
+        .stat-item { background: var(--stat-bg); backdrop-filter: blur(12px); padding: 16px 32px; border-radius: 16px; border: 1px solid var(--stat-border); transition: 0.4s; min-width: 100px; text-align: center; }
+        .stat-item:hover { transform: translateY(-4px); background: rgba(255,255,255,0.18); }
+        .stat-item .number { font-weight: 900; font-size: 2rem; }
+        .stat-item .label { font-size: 0.75rem; opacity: 0.7; margin-top: 2px; }
+        .stat-item .icon { font-size: 1.4rem; opacity: 0.6; margin-bottom: 4px; }
+        
+        .search-container { padding: 28px 0 12px 0; }
+        .search-wrapper { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+        .search-box {
+            flex: 1;
+            min-width: 320px;
+            display: flex;
+            background: var(--search-bg);
+            border: 2px solid var(--search-border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .search-box:focus-within { border-color: #6C63FF; box-shadow: 0 0 0 4px rgba(108,99,255,0.08); }
+        .search-box input { flex: 1; border: none; padding: 14px 20px; font-size: 0.95rem; background: transparent; color: var(--search-text); outline: none; min-width: 100px; }
+        .search-box input::placeholder { color: var(--text-muted); }
+        .search-box button { background: linear-gradient(135deg, #6C63FF, #4A47B0); color: white; border: none; padding: 14px 24px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; }
+        .search-box button:hover { background: linear-gradient(135deg, #5a52d5, #3a37a0); }
+        .search-clear { background: none; border: none; color: var(--text-muted); padding: 0 16px; cursor: pointer; font-size: 1.2rem; display: none; }
+        .search-clear.visible { display: block; }
+        .search-clear:hover { color: var(--text-primary); }
+        
+        .filter-container { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 6px 0; }
+        .filter-label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-right: 8px; }
+        .filter-btn { padding: 6px 18px; border: 2px solid var(--filter-border); border-radius: 20px; background: var(--filter-bg); color: var(--filter-text); font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
+        .filter-btn:hover { border-color: var(--filter-hover-border); color: var(--filter-hover-text); }
+        .filter-btn.active { background: var(--filter-active-bg); color: var(--filter-active-text); border-color: var(--filter-active-bg); }
+        .filter-btn.active:hover { background: #5a52d5; border-color: #5a52d5; }
+        .filter-count { font-size: 0.8rem; color: var(--text-muted); margin-left: 8px; font-weight: 500; }
+        
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-top: 8px; }
+        .section-header h3 { font-weight: 800; font-size: 1.3rem; margin: 0; color: var(--section-header-color); }
+        .section-header .see-all { font-weight: 600; font-size: 0.85rem; color: #6C63FF; cursor: pointer; transition: 0.3s; background: none; border: none; padding: 6px 16px; border-radius: 20px; background: rgba(108,99,255,0.06); white-space: nowrap; }
+        .section-header .see-all:hover { background: rgba(108,99,255,0.12); transform: scale(1.02); }
+        .results-count { font-size: 0.85rem; color: var(--text-muted); margin-left: 10px; font-weight: 400; }
+        
+        .scroll-container { overflow-x: auto; overflow-y: hidden; display: flex; gap: 16px; padding: 4px 4px 20px 4px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .scroll-container::-webkit-scrollbar { height: 6px; }
+        .scroll-container::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
+        .scroll-container::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; }
+        
+        .scroll-item { flex: 0 0 280px; min-width: 280px; }
+        
+        .note-card { background: var(--bg-card); border-radius: 16px; padding: 20px; border: 2px solid var(--border-color); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; display: flex; flex-direction: column; cursor: pointer; }
+        .note-card:hover { transform: translateY(-4px); border-color: #6C63FF; box-shadow: var(--shadow-hover); }
+        .note-card .title { font-weight: 700; font-size: 1rem; color: var(--text-primary); }
+        .note-card .summary { color: var(--text-muted); font-size: 0.85rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; flex: 1; margin-top: 6px; }
+        .note-card .meta-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); }
+        .rating-stars { color: #f39c12; font-size: 0.8rem; letter-spacing: 1px; white-space: nowrap; }
+        
+        .badge-modern { padding: 3px 12px; border-radius: 20px; font-weight: 500; font-size: 0.65rem; display: inline-block; white-space: nowrap; }
+        .badge-modern.tag { background: var(--badge-tag); color: var(--badge-tag-text); }
+        .badge-modern.course { background: var(--badge-course); color: var(--badge-course-text); }
+        .badge-modern.downloaded { background: var(--badge-downloaded); color: var(--badge-downloaded-text); }
+        .badge-modern.collection-badge { background: var(--badge-collection); color: var(--badge-collection-text); }
+        
+        .collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
+        .collection-item { background: var(--collection-item); border: 2px solid var(--border-color); border-radius: 16px; padding: 20px; text-align: center; transition: all 0.3s; cursor: pointer; }
+        .collection-item:hover { border-color: #6C63FF; transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .collection-item .code { font-weight: 800; font-size: 1.1rem; color: #6C63FF; }
+        .collection-item .count { font-size: 0.75rem; color: var(--text-muted); }
+        .collection-item .icon { font-size: 1.8rem; margin-bottom: 6px; display: block; }
+        
+        #allNotesPage { display: none; padding: 20px 0; }
+        #allNotesPage.active { display: block; }
+        .back-to-home { background: none; border: none; color: #6C63FF; font-weight: 600; font-size: 0.9rem; cursor: pointer; padding: 8px 18px; border-radius: 10px; background: rgba(108,99,255,0.06); transition: 0.3s; }
+        .back-to-home:hover { background: rgba(108,99,255,0.12); }
+        
+        .btn-view { background: linear-gradient(135deg, #6C63FF, #4A47B0) !important; color: white !important; border: none !important; padding: 10px !important; border-radius: 12px !important; font-weight: 600 !important; width: 100% !important; transition: all 0.3s ease !important; margin-top: 12px !important; font-size: 0.85rem !important; }
+        .btn-view:hover { transform: translateY(-2px) !important; box-shadow: 0 4px 16px rgba(108,99,255,0.20) !important; background: linear-gradient(135deg, #5a52d5, #3a37a0) !important; color: white !important; }
+        
+        .footer { background: var(--footer-bg); color: var(--footer-text); padding: 30px 0; margin-top: 40px; text-align: center; border-top: 1px solid #2a2a4e; transition: background 0.3s ease; }
+        .footer p { font-size: 0.85rem; margin-bottom: 4px; }
+        .footer a { color: #6C63FF; transition: 0.3s; text-decoration: none; }
+        .footer a:hover { color: #8a7fff; }
+        
+        .loading { text-align: center; padding: 40px; }
+        .loading .spinner { width: 36px; height: 36px; border: 3px solid var(--border-color); border-top: 3px solid #6C63FF; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .empty-state { text-align: center; padding: 40px 20px; width: 100%; }
+        .empty-state .icon { font-size: 3rem; color: var(--text-muted); }
+        .empty-state h5 { font-weight: 700; margin-top: 12px; font-size: 1.1rem; color: var(--text-primary); }
+        .empty-state p { color: var(--text-muted); font-size: 0.9rem; }
+        
+        @media (max-width: 1200px) { .hero h1 { font-size: 2.6rem; } .scroll-item { flex: 0 0 250px; min-width: 250px; } }
+        @media (max-width: 992px) { .hero h1 { font-size: 2.2rem; } .hero .lead { font-size: 1rem; } .search-box { min-width: 250px; } .scroll-item { flex: 0 0 230px; min-width: 230px; } .collection-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; } .hero { padding: 40px 0 30px; } .search-wrapper { flex-direction: column; align-items: stretch; } .search-box { min-width: 100%; }
+            .search-box input { padding: 12px 16px; font-size: 0.9rem; } .search-box button { padding: 12px 18px; font-size: 0.85rem; } .filter-container { justify-content: center; }
+            .filter-btn { font-size: 0.7rem; padding: 4px 14px; } .stat-item .number { font-size: 1.4rem; } .stat-item { min-width: 70px; padding: 12px 16px; } .stats-row { gap: 12px; }
+            .scroll-item { flex: 0 0 200px; min-width: 200px; } .collection-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); } .navbar-custom .brand { font-size: 1rem; }
+            .nav-links a { font-size: 0.8rem; padding: 6px 12px; } .btn-upload-nav { font-size: 0.8rem !important; padding: 6px 14px !important; } .dark-toggle { padding: 4px 10px; font-size: 0.75rem; }
+            .dark-toggle .toggle-text { display: none; } .section-header h3 { font-size: 1.1rem; } .section-header .see-all { font-size: 0.75rem; padding: 4px 12px; }
+        }
+        @media (max-width: 480px) { .hero h1 { font-size: 1.5rem; } .hero .lead { font-size: 0.85rem; } .stat-item .number { font-size: 1.1rem; } .stat-item { min-width: 60px; padding: 8px 12px; }
+            .stats-row { gap: 8px; } .scroll-item { flex: 0 0 170px; min-width: 170px; } .note-card { padding: 14px; } .note-card .title { font-size: 0.85rem; } .note-card .summary { font-size: 0.75rem; }
+            .collection-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); } .collection-item { padding: 14px; } .collection-item .code { font-size: 0.9rem; } .navbar-custom .brand { font-size: 0.85rem; }
+            .nav-links a { font-size: 0.7rem; padding: 4px 10px; } .btn-upload-nav { font-size: 0.7rem !important; padding: 4px 12px !important; } .dark-toggle { padding: 3px 8px; font-size: 0.65rem; }
+            .section-header h3 { font-size: 1rem; } .section-header .see-all { font-size: 0.65rem; padding: 3px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR - NO UNDERLINE ===== -->
+<nav class="navbar-custom">
+    <div class="container d-flex justify-content-between align-items-center">
+        <a href="index.html" class="brand"><i class="bi bi-mortarboard-fill"></i> USP Notes</a>
+        <div class="nav-links">
+            <a href="index.html"><i class="bi bi-house"></i> Home</a>
+            <a href="quizzes.html"><i class="bi bi-question-circle"></i> <span class="d-none d-sm-inline">Quizzes</span></a>
+            <a href="mylearning.html"><i class="bi bi-brain"></i> My Learning</a>
+            <a href="leaderboard.html"><i class="bi bi-trophy"></i> Leaderboard</a>
+            <button class="dark-toggle" onclick="toggleDarkMode()" id="darkToggle">
+                <span class="toggle-icon" id="toggleIcon">🌙</span>
+                <span class="toggle-text" id="toggleText">Dark</span>
+            </button>
+            <a href="upload.html" class="btn-upload-nav"><i class="bi bi-cloud-upload"></i> Upload</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+    <div class="container text-center">
+        <h1>📚 Study Smarter, Not Harder</h1>
+        <p class="lead">Upload lecture notes and get AI-generated summaries, key points, and study materials</p>
+        <div class="stats-row">
+            <div class="stat-item"><div class="icon">📚</div><div class="number" id="totalNotes">0</div><div class="label">Notes</div></div>
+            <div class="stat-item"><div class="icon">⬇️</div><div class="number" id="totalDownloads">0</div><div class="label">Downloads</div></div>
+            <div class="stat-item"><div class="icon">⭐</div><div class="number" id="avgRating">0.0</div><div class="label">Rating</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== SEARCH & FILTER ===== -->
+<div class="container search-container">
+    <div class="search-wrapper">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by title, course, or tag..." oninput="handleSearch()">
+            <button onclick="handleSearch()"><i class="bi bi-search"></i></button>
+            <button class="search-clear" id="clearSearch" onclick="clearSearch()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="filter-container">
+            <span class="filter-label">Subject:</span>
+            <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All</button>
+            <button class="filter-btn" data-filter="cs" onclick="setFilter('cs')">💻 CS</button>
+            <button class="filter-btn" data-filter="ma" onclick="setFilter('ma')">📐 Math</button>
+            <button class="filter-btn" data-filter="ph" onclick="setFilter('ph')">⚛️ Physics</button>
+            <button class="filter-btn" data-filter="en" onclick="setFilter('en')">📖 English</button>
+            <button class="filter-btn" data-filter="bs" onclick="setFilter('bs')">📊 Business</button>
+            <span class="filter-count" id="resultCount"></span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="container py-3">
+    <div id="mainSection">
+        <div class="section-header">
+            <h3><i class="bi bi-book text-primary"></i> Available Notes <span class="results-count" id="availableCount"></span></h3>
+            <button class="see-all" onclick="showAllNotes()">See All →</button>
+        </div>
+        <div id="availableContainer" class="scroll-container">
+            <div class="loading"><div class="spinner"></div><p style="font-size:0.9rem;color:var(--text-muted);">Loading...</p></div>
+        </div>
+    </div>
+
+    <div id="allNotesPage">
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <button class="back-to-home" onclick="hideAllNotes()"><i class="bi bi-arrow-left"></i> Back</button>
+            <h5 style="font-weight:700;margin:0;color:var(--text-primary);font-size:1.2rem;">All Notes <span class="results-count" id="allCount"></span></h5>
+        </div>
+        <div id="allNotesContainer" class="row g-3"></div>
+    </div>
+
+    <div class="mt-4" id="recentSection">
+        <div class="section-header">
+            <h3><i class="bi bi-clock-history text-primary"></i> Recently Opened</h3>
+        </div>
+        <div id="recentContainer" class="scroll-container">
+            <div class="empty-state"><div class="icon">🕐</div><h5>No recent notes</h5><p>Notes you view appear here</p></div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <div class="section-header">
+            <h3><i class="bi bi-folder text-primary"></i> Collections</h3>
+        </div>
+        <div id="collectionsContainer" class="collection-grid">
+            <div class="loading" style="grid-column:1/-1;"><div class="spinner"></div><p style="font-size:0.9rem;color:var(--text-muted);">Loading...</p></div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="container">
+        <p>© 2026 USP Notes Marketplace · Made with ❤️ for USP students</p>
+        <p><a href="upload.html"><i class="bi bi-cloud-upload"></i> Upload Notes</a></p>
+    </div>
+</footer>
+
+<script>
+const API_URL = 'http://localhost:5000';
+let allNotes = [];
+let allCollections = [];
+let currentFilter = 'all';
+let currentSearch = '';
+
+// ===== DARK MODE =====
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateToggleIcon(newTheme);
+}
+
+function updateToggleIcon(theme) {
+    const icon = document.getElementById('toggleIcon');
+    const text = document.getElementById('toggleText');
+    if (theme === 'dark') { icon.textContent = '☀️'; text.textContent = 'Light'; } 
+    else { icon.textContent = '🌙'; text.textContent = 'Dark'; }
+}
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateToggleIcon(savedTheme);
+}
+
+// ===== SEARCH & FILTER =====
+function handleSearch() {
+    const input = document.getElementById('searchInput');
+    currentSearch = input.value.trim();
+    const clearBtn = document.getElementById('clearSearch');
+    if (currentSearch.length > 0) { clearBtn.classList.add('visible'); } 
+    else { clearBtn.classList.remove('visible'); }
+    applyFiltersAndSearch();
+}
+
+function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    currentSearch = '';
+    document.getElementById('clearSearch').classList.remove('visible');
+    applyFiltersAndSearch();
+}
+
+function setFilter(filter) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+    applyFiltersAndSearch();
+}
+
+function applyFiltersAndSearch() {
+    const filtered = getFilteredNotes();
+    renderAvailableNotes(filtered);
+    updateResultCount(filtered);
+}
+
+function getFilteredNotes() {
+    let filtered = [...allNotes];
+    if (currentFilter !== 'all') {
+        const map = { 'cs': 'CS', 'ma': 'MA', 'ph': 'PH', 'en': 'EN', 'bs': 'BS' };
+        const prefix = map[currentFilter] || currentFilter.toUpperCase();
+        filtered = filtered.filter(n => n.course_code && n.course_code.toUpperCase().startsWith(prefix));
+    }
+    if (currentSearch) {
+        const search = currentSearch.toLowerCase();
+        filtered = filtered.filter(q => 
+            (q.title || '').toLowerCase().includes(search) ||
+            (q.course_code || '').toLowerCase().includes(search) ||
+            (q.tags || []).some(t => t.toLowerCase().includes(search)) ||
+            (q.summary || '').toLowerCase().includes(search)
+        );
+    }
+    return filtered;
+}
+
+function updateResultCount(filtered) {
+    const count = filtered.length;
+    const total = allNotes.length;
+    const countEl = document.getElementById('resultCount');
+    if (count === total) { countEl.textContent = `${total} notes`; } 
+    else { countEl.textContent = `${count} of ${total}`; }
+    document.getElementById('availableCount').textContent = `(${count})`;
+}
+
+async function loadNotes() {
+    try {
+        const response = await fetch(API_URL + '/api/notes');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        allNotes = await response.json();
+        updateStats(allNotes);
+        applyFiltersAndSearch();
+        renderRecentNotes();
+        loadCollections();
+    } catch (error) {
+        document.getElementById('availableContainer').innerHTML = `
+            <div class="empty-state"><div class="icon">⚠️</div><h5>Error loading</h5><p>${error.message}</p></div>
+        `;
+    }
+}
+
+async function loadCollections() {
+    try {
+        const response = await fetch(API_URL + '/api/collections');
+        if (!response.ok) throw new Error('Failed to load collections');
+        allCollections = await response.json();
+        renderCollections(allCollections);
+    } catch (error) {
+        document.getElementById('collectionsContainer').innerHTML = `
+            <div class="empty-state" style="grid-column:1/-1;"><div class="icon">📁</div><h5>Error loading collections</h5><p>${error.message}</p></div>
+        `;
+    }
+}
+
+function updateStats(notes) {
+    document.getElementById('totalNotes').textContent = notes.length;
+    const downloads = notes.reduce((sum, n) => sum + (n.downloads || 0), 0);
+    document.getElementById('totalDownloads').textContent = downloads;
+    const total = notes.reduce((sum, n) => sum + (n.rating || 0), 0);
+    const count = notes.filter(n => n.rating > 0).length;
+    document.getElementById('avgRating').textContent = count > 0 ? (total / count).toFixed(1) : '0.0';
+}
+
+function renderAvailableNotes(notes) {
+    const container = document.getElementById('availableContainer');
+    if (notes.length === 0) {
+        container.innerHTML = `<div class="empty-state"><div class="icon">📭</div><h5>No notes found</h5><p>Try adjusting your search or filters</p></div>`;
+        return;
+    }
+    const display = notes.slice(0, 10);
+    container.innerHTML = '';
+    display.forEach(note => { container.appendChild(createNoteCard(note)); });
+}
+
+function renderAllNotes(notes) {
+    const container = document.getElementById('allNotesContainer');
+    document.getElementById('allCount').textContent = `(${notes.length})`;
+    if (notes.length === 0) {
+        container.innerHTML = `<div class="col-12"><div class="empty-state"><div class="icon">📭</div><h5>No notes found</h5></div></div>`;
+        return;
+    }
+    container.innerHTML = '';
+    notes.forEach(note => {
+        const col = document.createElement('div');
+        col.className = 'col-md-4 col-lg-3';
+        col.appendChild(createNoteCard(note, true));
+        container.appendChild(col);
+    });
+}
+
+function createNoteCard(note, full = false) {
+    const div = document.createElement('div');
+    div.className = full ? 'h-100' : 'scroll-item';
+    const stars = '⭐'.repeat(Math.round(note.rating || 0)) + '☆'.repeat(5 - Math.round(note.rating || 0));
+    const tags = (note.tags || []).slice(0, 2).map(t => `<span class="badge-modern tag me-1">#${t}</span>`).join('');
+    const downloaded = JSON.parse(localStorage.getItem('downloaded_notes') || '[]');
+    const isDownloaded = downloaded.includes(note.note_id);
+    const collection = note.collection ? `<span class="badge-modern collection-badge"><i class="bi bi-folder"></i> ${note.collection}</span>` : '';
+    div.innerHTML = `
+        <div class="note-card" onclick="viewNote('${note.note_id}')">
+            <div class="d-flex justify-content-between align-items-start">
+                <span class="title">${note.title || 'Untitled'}</span>
+                <span class="badge-modern course">${note.course_code || 'N/A'}</span>
+            </div>
+            <div class="mt-1">${tags} ${isDownloaded ? '<span class="badge-modern downloaded"><i class="bi bi-check-circle-fill"></i></span>' : ''} ${collection}</div>
+            <div class="summary">${note.summary ? note.summary.substring(0, 90) + '...' : 'No summary'}</div>
+            <div class="meta-row">
+                <span class="rating-stars">${stars}</span>
+                <span class="text-muted small" style="font-size:0.7rem;color:var(--text-muted);"><i class="bi bi-eye"></i> ${note.views || 0}</span>
+            </div>
+        </div>
+    `;
+    return div;
+}
+
+function renderCollections(collections) {
+    const container = document.getElementById('collectionsContainer');
+    if (collections.length === 0) {
+        container.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="icon">📁</div><h5>No collections yet</h5><p>Upload notes and add them to collections</p></div>`;
+        return;
+    }
+    container.innerHTML = '';
+    collections.forEach(col => {
+        const div = document.createElement('div');
+        div.className = 'collection-item';
+        div.onclick = () => viewCollection(col.name);
+        div.innerHTML = `
+            <span class="icon">📂</span>
+            <div class="code">${col.name}</div>
+            <div class="count">${col.count} note${col.count > 1 ? 's' : ''}</div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+async function viewCollection(name) {
+    try {
+        const response = await fetch(API_URL + `/api/collections/${encodeURIComponent(name)}`);
+        if (!response.ok) throw new Error('Failed to load collection');
+        const notes = await response.json();
+        showAllNotes();
+        const container = document.getElementById('allNotesContainer');
+        document.getElementById('allNotesPage').querySelector('h5').textContent = `Collection: ${name}`;
+        if (notes.length === 0) {
+            container.innerHTML = `<div class="col-12"><div class="empty-state"><div class="icon">📭</div><h5>Empty collection</h5></div></div>`;
+            return;
+        }
+        container.innerHTML = '';
+        notes.forEach(note => {
+            const col = document.createElement('div');
+            col.className = 'col-md-4 col-lg-3';
+            col.appendChild(createNoteCard(note, true));
+            container.appendChild(col);
+        });
+    } catch (error) {
+        alert('Error loading collection: ' + error.message);
+    }
+}
+
+function renderRecentNotes() {
+    const container = document.getElementById('recentContainer');
+    const recentIds = JSON.parse(localStorage.getItem('recent_notes') || '[]');
+    if (recentIds.length === 0) {
+        container.innerHTML = `<div class="empty-state"><div class="icon">🕐</div><h5>No recent notes</h5><p>Notes you view appear here</p></div>`;
+        return;
+    }
+    const recent = allNotes.filter(n => recentIds.includes(n.note_id));
+    if (recent.length === 0) {
+        container.innerHTML = `<div class="empty-state"><div class="icon">🕐</div><h5>No recent notes</h5></div>`;
+        return;
+    }
+    container.innerHTML = '';
+    recent.slice(0, 8).forEach(note => { container.appendChild(createNoteCard(note)); });
+}
+
+function showAllNotes() {
+    const filtered = getFilteredNotes();
+    document.getElementById('mainSection').style.display = 'none';
+    document.getElementById('recentSection').style.display = 'none';
+    document.querySelector('.mt-4:last-of-type').style.display = 'none';
+    document.getElementById('allNotesPage').classList.add('active');
+    renderAllNotes(filtered);
+    document.getElementById('allNotesPage').scrollIntoView({ behavior: 'smooth' });
+}
+
+function hideAllNotes() {
+    document.getElementById('mainSection').style.display = 'block';
+    document.getElementById('recentSection').style.display = 'block';
+    document.querySelector('.mt-4:last-of-type').style.display = 'block';
+    document.getElementById('allNotesPage').classList.remove('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function viewNote(noteId) {
+    const recent = JSON.parse(localStorage.getItem('recent_notes') || '[]');
+    const filtered = recent.filter(id => id !== noteId);
+    filtered.unshift(noteId);
+    if (filtered.length > 20) filtered.pop();
+    localStorage.setItem('recent_notes', JSON.stringify(filtered));
+    window.location.href = `note.html?id=${noteId}`;
+}
+
+loadTheme();
+loadNotes();
+</script>
+</body>
+</html>

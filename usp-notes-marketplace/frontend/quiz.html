@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+    <title>Take Quiz - USP Notes Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet"/>
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255,255,255,0.92);
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #6a6a8a;
+            --border-color: #e8e8f0;
+            --border-hover: #d0d0e0;
+            --shadow: 0 4px 24px rgba(0,0,0,0.04);
+            --footer-bg: #1a1a2e;
+            --footer-text: #8a8aaa;
+            --toggle-bg: #ddd;
+            --toggle-active: #6C63FF;
+            --nav-link-color: #4a4a6a;
+            --nav-link-hover: #1a1a2e;
+            --score-pass: #2ecc71;
+            --score-fail: #e74c3c;
+            --review-correct: #2ecc71;
+            --review-wrong: #e74c3c;
+            --btn-pdf-bg: #dc3545;
+            --btn-pdf-hover: #c0392b;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #12121e;
+            --bg-card: #1a1a2e;
+            --bg-nav: rgba(26,26,46,0.92);
+            --text-primary: #e8e8f0;
+            --text-secondary: #a8a8c0;
+            --text-muted: #8a8aaa;
+            --border-color: #2a2a4e;
+            --border-hover: #3a3a5e;
+            --shadow: 0 4px 24px rgba(0,0,0,0.2);
+            --footer-bg: #0a0a14;
+            --footer-text: #6a6a8a;
+            --toggle-bg: #3a3a5e;
+            --toggle-active: #6C63FF;
+            --nav-link-color: #a8a8c0;
+            --nav-link-hover: #e8e8f0;
+            --score-pass: #2ecc71;
+            --score-fail: #e74c3c;
+            --review-correct: #2ecc71;
+            --review-wrong: #e74c3c;
+            --btn-pdf-bg: #c0392b;
+            --btn-pdf-hover: #e74c3c;
+        }
+
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg-primary); color: var(--text-primary); transition: background 0.3s ease, color 0.3s ease; }
+        
+        .navbar-custom { 
+            background: var(--bg-nav); 
+            backdrop-filter: blur(16px); 
+            padding: 10px 0; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 2px solid rgba(108,99,255,0.06);
+            transition: background 0.3s ease;
+            min-height: 60px;
+        }
+        .navbar-custom .brand { 
+            font-weight: 800; 
+            font-size: 1.1rem; 
+            color: var(--text-primary); 
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        .navbar-custom .brand:hover { color: #6C63FF; }
+        .navbar-custom .brand i { color: #6C63FF; margin-right: 6px; }
+        
+        .nav-links { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+        .nav-links a { 
+            padding: 6px 12px; 
+            border-radius: 8px; 
+            font-weight: 500; 
+            font-size: 0.8rem; 
+            color: var(--nav-link-color); 
+            transition: 0.3s; 
+            text-decoration: none;
+        }
+        .nav-links a:hover { background: rgba(108,99,255,0.08); color: var(--nav-link-hover); }
+        .nav-links a i { margin-right: 4px; }
+        
+        .dark-toggle {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(108,99,255,0.06);
+            transition: 0.3s;
+            border: none;
+            color: var(--nav-link-color);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .dark-toggle:hover { background: rgba(108,99,255,0.12); }
+        .dark-toggle .toggle-icon { font-size: 1rem; }
+        .dark-toggle .toggle-text { font-size: 0.65rem; }
+        
+        .btn-back-nav { 
+            background: transparent; 
+            border: 2px solid var(--border-color); 
+            padding: 4px 12px !important; 
+            border-radius: 8px !important; 
+            font-weight: 500 !important; 
+            transition: all 0.3s !important; 
+            color: var(--text-secondary);
+            font-size: 0.8rem !important;
+        }
+        .btn-back-nav:hover { border-color: #6C63FF; color: #6C63FF; background: rgba(108,99,255,0.04); }
+        
+        .quiz-card { 
+            background: var(--bg-card); 
+            border-radius: 20px; 
+            padding: 32px; 
+            box-shadow: var(--shadow); 
+            max-width: 820px; 
+            margin: 0 auto; 
+            border: 2px solid var(--border-color); 
+            transition: all 0.3s ease;
+        }
+        .quiz-card:hover { border-color: var(--border-hover); }
+        .quiz-card h2 { font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; color: var(--text-primary); margin-bottom: 4px; }
+        
+        .btn-primary { 
+            background: linear-gradient(135deg, #6C63FF, #4A47B0); 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            transition: all 0.3s; 
+            color: white; 
+            font-size: 0.85rem;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(108,99,255,0.25); color: white; }
+        
+        .option-btn { 
+            display: block; 
+            width: 100%; 
+            text-align: left; 
+            padding: 12px 16px; 
+            border: 2px solid var(--border-color); 
+            border-radius: 10px; 
+            margin-bottom: 8px; 
+            background: var(--bg-card); 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        .option-btn:hover { border-color: #6C63FF; background: rgba(108,99,255,0.04); }
+        .option-btn.selected { border-color: #6C63FF; background: #6C63FF; color: white; }
+        
+        .badge-modern { 
+            padding: 3px 10px; 
+            border-radius: 20px; 
+            font-weight: 500; 
+            font-size: 0.65rem; 
+            display: inline-block; 
+        }
+        .badge-modern.course { background: #1a1a2e; color: white; }
+        .badge-modern.difficulty-easy { background: #d4edda; color: #155724; }
+        .badge-modern.difficulty-medium { background: #fff3cd; color: #856404; }
+        .badge-modern.difficulty-hard { background: #f8d7da; color: #721c24; }
+        
+        .progress-bar-custom { height: 6px; background: var(--border-color); border-radius: 0; margin-bottom: 16px; }
+        .progress-bar-custom .fill { height: 100%; background: linear-gradient(90deg, #6C63FF, #4A47B0); transition: width 0.4s; }
+        
+        .footer-actions { display: flex; justify-content: space-between; margin-top: 20px; gap: 12px; }
+        .footer-actions button { flex: 1; }
+        
+        .score-circle { 
+            width: 120px; height: 120px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 2.5rem; font-weight: 700; 
+            margin: 0 auto 16px; 
+            border: 4px solid; 
+        }
+        .score-circle.pass { border-color: var(--score-pass); color: var(--score-pass); }
+        .score-circle.fail { border-color: var(--score-fail); color: var(--score-fail); }
+        
+        .review-item { 
+            padding: 12px 16px; 
+            border-left: 4px solid; 
+            margin-bottom: 10px; 
+            background: var(--bg-primary); 
+            border-radius: 8px; 
+        }
+        .review-item.correct { border-color: var(--review-correct); }
+        .review-item.wrong { border-color: var(--review-wrong); }
+        
+        .footer { 
+            background: var(--footer-bg); 
+            color: var(--footer-text); 
+            padding: 20px 0; 
+            margin-top: 30px; 
+            text-align: center; 
+            border-top: 1px solid #2a2a4e; 
+            transition: background 0.3s ease;
+        }
+        .footer p { font-size: 0.8rem; margin-bottom: 4px; }
+        .footer a { color: #6C63FF; transition: 0.3s; }
+        .footer a:hover { color: #8a7fff; }
+        
+        .loading { text-align: center; padding: 40px; }
+        .loading .spinner { width: 30px; height: 30px; border: 3px solid var(--border-color); border-top: 3px solid #6C63FF; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .error-box { background: #f8d7da; color: #721c24; padding: 16px; border-radius: 10px; margin: 16px 0; border: 1px solid #f5c6cb; font-size: 0.9rem; }
+        
+        @media (max-width: 768px) {
+            .quiz-card { padding: 20px; }
+            .quiz-card h2 { font-size: 1.3rem; }
+            .option-btn { font-size: 0.85rem; padding: 10px 14px; }
+            .footer-actions { flex-direction: column; }
+            .footer-actions button { width: 100%; }
+            .nav-links a { font-size: 0.7rem; padding: 4px 10px; }
+            .dark-toggle .toggle-text { display: none; }
+        }
+        @media (max-width: 480px) {
+            .quiz-card { padding: 16px; }
+            .quiz-card h2 { font-size: 1.1rem; }
+            .option-btn { font-size: 0.8rem; padding: 8px 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar-custom">
+    <div class="container d-flex justify-content-between align-items-center">
+        <a href="index.html" class="brand"><i class="bi bi-mortarboard-fill"></i> USP Notes</a>
+        <div class="nav-links">
+            <a href="index.html"><i class="bi bi-house"></i> <span class="d-none d-sm-inline">Home</span></a>
+            <a href="index.html" class="btn-back-nav"><i class="bi bi-arrow-left"></i> <span class="d-none d-sm-inline">Back</span></a>
+            <button class="dark-toggle" onclick="toggleDarkMode()" id="darkToggle">
+                <span class="toggle-icon" id="toggleIcon">🌙</span>
+                <span class="toggle-text" id="toggleText">Dark</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-3">
+    <div id="quizContainer">
+        <div class="loading"><div class="spinner"></div><p style="color:var(--text-muted);font-size:0.9rem;">Loading quiz...</p></div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container"><p>© 2026 USP Notes Marketplace · Made with ❤️ for USP students</p></div>
+</footer>
+
+<script>
+const API_URL = 'http://localhost:5000';
+const urlParams = new URLSearchParams(window.location.search);
+const quizId = urlParams.get('id');
+
+// ===== DARK MODE =====
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateToggleIcon(newTheme);
+}
+
+function updateToggleIcon(theme) {
+    const icon = document.getElementById('toggleIcon');
+    const text = document.getElementById('toggleText');
+    if (theme === 'dark') {
+        icon.textContent = '☀️';
+        text.textContent = 'Light';
+    } else {
+        icon.textContent = '🌙';
+        text.textContent = 'Dark';
+    }
+}
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateToggleIcon(savedTheme);
+}
+
+if (!quizId) {
+    document.getElementById('quizContainer').innerHTML = `
+        <div class="quiz-card text-center">
+            <h3 style="color:var(--text-primary);">❌ No quiz selected</h3>
+            <a href="index.html" class="btn btn-primary mt-3">Go Back</a>
+        </div>
+    `;
+} else {
+    loadQuiz(quizId);
+}
+
+async function loadQuiz(quizId) {
+    try {
+        const response = await fetch(API_URL + `/api/quizzes/${quizId}`);
+        if (!response.ok) throw new Error(`Quiz not found (Status: ${response.status})`);
+        const quiz = await response.json();
+        displayQuiz(quiz);
+    } catch (error) {
+        document.getElementById('quizContainer').innerHTML = `
+            <div class="quiz-card">
+                <div class="error-box">
+                    <h5><i class="bi bi-exclamation-triangle"></i> Error Loading Quiz</h5>
+                    <p>${error.message}</p>
+                    <button onclick="loadQuiz('${quizId}')" class="btn btn-primary btn-sm mt-2">Retry</button>
+                    <a href="index.html" class="btn btn-outline-secondary btn-sm mt-2 ms-2">Go Back</a>
+                </div>
+            </div>
+        `;
+    }
+}
+
+let currentQuestion = 0;
+let answers = {};
+let studentName = '';
+let quizData = null;
+let isSubmitting = false;
+
+function displayQuiz(quiz) {
+    quizData = quiz;
+    if (!quiz.questions || quiz.questions.length === 0) {
+        document.getElementById('quizContainer').innerHTML = `
+            <div class="quiz-card text-center">
+                <h3 style="color:var(--text-primary);">📭 No questions found</h3>
+                <a href="index.html" class="btn btn-primary mt-3">Go Back</a>
+            </div>
+        `;
+        return;
+    }
+    showNameEntry(quiz);
+}
+
+function showNameEntry(quiz) {
+    const diff = quiz.difficulty || 'medium';
+    const diffClass = diff === 'easy' ? 'difficulty-easy' : diff === 'hard' ? 'difficulty-hard' : 'difficulty-medium';
+    const diffLabel = diff.charAt(0).toUpperCase() + diff.slice(1);
+    
+    document.getElementById('quizContainer').innerHTML = `
+        <div class="quiz-card">
+            <h2>${quiz.title || 'Untitled Quiz'}</h2>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+                <span class="badge-modern course">${quiz.course_code || 'N/A'}</span>
+                <span class="badge-modern ${diffClass}">${diffLabel}</span>
+                <span style="background:#6C63FF;color:white;padding:2px 10px;border-radius:12px;font-size:0.7rem;font-weight:500;">${quiz.questions.length} questions</span>
+            </div>
+            <p style="color:var(--text-muted);font-size:0.95rem;">${quiz.description || ''}</p>
+            <hr style="border-color:var(--border-color);">
+            <label style="font-weight:600;font-size:0.95rem;">Enter your name to begin:</label>
+            <input type="text" id="nameInput" placeholder="Your full name..." style="width:100%;padding:10px 14px;border:2px solid var(--border-color);border-radius:10px;margin-top:8px;background:var(--bg-card);color:var(--text-primary);font-size:0.95rem;" onkeydown="if(event.key==='Enter') startQuiz()">
+            <button class="btn btn-primary w-100 mt-3" onclick="startQuiz()" id="startQuizBtn">▶ Start Quiz</button>
+        </div>
+    `;
+}
+
+function startQuiz() {
+    const nameInput = document.getElementById('nameInput');
+    studentName = nameInput.value.trim();
+    if (!studentName) {
+        nameInput.style.borderColor = '#dc3545';
+        return;
+    }
+    currentQuestion = 0;
+    answers = {};
+    renderQuestion();
+}
+
+function renderQuestion() {
+    if (currentQuestion >= quizData.questions.length) {
+        submitQuiz();
+        return;
+    }
+
+    const q = quizData.questions[currentQuestion];
+    const total = quizData.questions.length;
+    const progress = ((currentQuestion + 1) / total * 100);
+
+    let optionsHtml = q.options.map((opt, i) => {
+        const selected = answers[currentQuestion] === i ? 'selected' : '';
+        return `<button class="option-btn ${selected}" onclick="selectOption(${i})">${opt}</button>`;
+    }).join('');
+
+    document.getElementById('quizContainer').innerHTML = `
+        <div class="quiz-card">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                <span style="font-weight:600;">Question ${currentQuestion + 1} of ${total}</span>
+                <span style="color:var(--text-muted);font-size:0.85rem;">${studentName}</span>
+            </div>
+            <div class="progress-bar-custom"><div class="fill" style="width:${progress}%;"></div></div>
+            <h4 style="margin-bottom:16px;color:var(--text-primary);font-size:1.05rem;">${q.question}</h4>
+            ${optionsHtml}
+            <div class="footer-actions">
+                <button class="btn btn-secondary" onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''} style="background:var(--border-color);color:var(--text-primary);border:none;padding:10px 16px;border-radius:10px;font-weight:500;">← Previous</button>
+                <button class="btn btn-primary" onclick="nextQuestion()" id="nextQuestionBtn">${currentQuestion === total - 1 ? 'Submit' : 'Next →'}</button>
+            </div>
+        </div>
+    `;
+}
+
+function selectOption(index) {
+    answers[currentQuestion] = index;
+    document.querySelectorAll('.option-btn').forEach((btn, i) => {
+        btn.classList.toggle('selected', i === index);
+    });
+}
+
+function nextQuestion() {
+    if (answers[currentQuestion] === undefined) {
+        alert('Please select an answer before continuing.');
+        return;
+    }
+    currentQuestion++;
+    renderQuestion();
+}
+
+function prevQuestion() {
+    if (currentQuestion > 0) { currentQuestion--; renderQuestion(); }
+}
+
+async function submitQuiz() {
+    // Prevent multiple submissions
+    if (isSubmitting) return;
+    isSubmitting = true;
+    
+    document.getElementById('quizContainer').innerHTML = `
+        <div class="loading"><div class="spinner"></div><p style="color:var(--text-muted);">Submitting...</p></div>
+    `;
+
+    try {
+        const response = await fetch(API_URL + `/api/quizzes/${quizId}/submit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                student_name: studentName,
+                answers: answers
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showResults(result);
+        } else {
+            document.getElementById('quizContainer').innerHTML = `
+                <div class="quiz-card text-center" style="color:#dc3545;">
+                    <h3>❌ Error submitting quiz</h3>
+                    <p>${result.error || 'Unknown error'}</p>
+                    <a href="index.html" class="btn btn-primary mt-3">Go Back</a>
+                </div>
+            `;
+        }
+    } catch (error) {
+        document.getElementById('quizContainer').innerHTML = `
+            <div class="quiz-card text-center" style="color:#dc3545;">
+                <h3>❌ Connection error</h3>
+                <p>${error.message}</p>
+                <a href="index.html" class="btn btn-primary mt-3">Go Back</a>
+            </div>
+        `;
+    }
+    
+    isSubmitting = false;
+}
+
+function showResults(result) {
+    const passed = result.passed;
+    let reviewHtml = result.results.map((r, i) => {
+        const cls = r.is_correct ? 'correct' : 'wrong';
+        return `
+            <div class="review-item ${cls}">
+                <strong>${r.is_correct ? '✅' : '❌'} Question ${i + 1}</strong>
+                <div style="color:var(--text-primary);">${r.question}</div>
+                <div style="color:var(--text-muted);font-size:0.9rem;">Your answer: ${r.your_answer}</div>
+                ${!r.is_correct ? `<div style="color:var(--text-muted);font-size:0.9rem;">Correct: ${r.correct_answer}</div>` : ''}
+                ${r.explanation ? `<div style="color:var(--text-muted);font-size:0.85rem;margin-top:4px;">💡 ${r.explanation}</div>` : ''}
+            </div>
+        `;
+    }).join('');
+
+    document.getElementById('quizContainer').innerHTML = `
+        <div class="quiz-card text-center">
+            <div class="score-circle ${passed ? 'pass' : 'fail'}">${result.percentage}%</div>
+            <h3 style="color:var(--text-primary);">${passed ? '🎉 Great job, ' + studentName + '!' : '📚 Keep practicing, ' + studentName + '!'}</h3>
+            <p style="color:var(--text-muted);">You got <strong>${result.score}</strong> out of <strong>${result.total}</strong> correct.</p>
+            <div style="display:flex;gap:12px;justify-content:center;margin:12px 0;flex-wrap:wrap;">
+                <span style="background:#d4edda;color:#155724;padding:4px 16px;border-radius:12px;">✅ ${result.score} Correct</span>
+                <span style="background:#f8d7da;color:#721c24;padding:4px 16px;border-radius:12px;">❌ ${result.total - result.score} Incorrect</span>
+                <span style="background:${passed ? '#d4edda' : '#f8d7da'};color:${passed ? '#155724' : '#721c24'};padding:4px 16px;border-radius:12px;">${passed ? 'Passed' : 'Failed'}</span>
+            </div>
+            <hr style="border-color:var(--border-color);">
+            <div style="text-align:left;">
+                <h5 style="color:var(--text-primary);">Review Answers</h5>
+                ${reviewHtml}
+            </div>
+            <a href="index.html" class="btn btn-primary mt-3" style="display:inline-block;padding:10px 24px;border-radius:10px;text-decoration:none;">← Back to Quizzes</a>
+            <button onclick="window.location.reload()" class="btn btn-secondary mt-3 ms-2" style="display:inline-block;padding:10px 24px;border-radius:10px;text-decoration:none;border:none;background:var(--border-color);color:var(--text-primary);">🔄 Retry Quiz</button>
+        </div>
+    `;
+    
+    // Store results in localStorage so they survive page refresh
+    localStorage.setItem('quizResults', JSON.stringify({
+        studentName: studentName,
+        results: result,
+        timestamp: new Date().toISOString()
+    }));
+}
+
+loadTheme();
+</script>
+</body>
+</html>

@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+    <title>View Note - USP Notes Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-nav: rgba(255,255,255,0.92);
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #6a6a8a;
+            --border-color: #e8e8f0;
+            --border-hover: #d0d0e0;
+            --shadow: 0 4px 24px rgba(0,0,0,0.04);
+            --badge-tag: #eeedff;
+            --badge-tag-text: #6C63FF;
+            --badge-course: #1a1a2e;
+            --badge-course-text: white;
+            --badge-downloaded: #e6f9ee;
+            --badge-downloaded-text: #2ecc71;
+            --badge-views: #e8f4fd;
+            --badge-views-text: #3498db;
+            --badge-downloads: #e6f9ee;
+            --badge-downloads-text: #2ecc71;
+            --footer-bg: #1a1a2e;
+            --footer-text: #8a8aaa;
+            --toggle-bg: #ddd;
+            --toggle-active: #6C63FF;
+            --keypoint-hover: #f8f9fe;
+            --word-count-bg: #f8f9fa;
+            --word-count-text: #6a6a8a;
+            --rating-locked: #2ecc71;
+            --review-correct: #28a745;
+            --review-wrong: #dc3545;
+            --review-bg: #f8f9fa;
+            --error-box-bg: #f8d7da;
+            --error-box-text: #721c24;
+            --nav-link-color: #4a4a6a;
+            --nav-link-hover: #1a1a2e;
+            --btn-pdf-bg: #dc3545;
+            --btn-pdf-hover: #c0392b;
+            --difficulty-beginner: #2ecc71;
+            --difficulty-intermediate: #f39c12;
+            --difficulty-advanced: #e74c3c;
+            --difficulty-expert: #8e44ad;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #12121e;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #1a1a2e;
+            --bg-nav: rgba(26,26,46,0.92);
+            --text-primary: #e8e8f0;
+            --text-secondary: #a8a8c0;
+            --text-muted: #8a8aaa;
+            --border-color: #2a2a4e;
+            --border-hover: #3a3a5e;
+            --shadow: 0 4px 24px rgba(0,0,0,0.2);
+            --badge-tag: #2a2a4e;
+            --badge-tag-text: #8a7fff;
+            --badge-course: #2a2a4e;
+            --badge-course-text: #e8e8f0;
+            --badge-downloaded: #0a2e1a;
+            --badge-downloaded-text: #2ecc71;
+            --badge-views: #0a1a2e;
+            --badge-views-text: #3498db;
+            --badge-downloads: #0a2e1a;
+            --badge-downloads-text: #2ecc71;
+            --footer-bg: #0a0a14;
+            --footer-text: #6a6a8a;
+            --toggle-bg: #3a3a5e;
+            --toggle-active: #6C63FF;
+            --keypoint-hover: #1a1a3e;
+            --word-count-bg: #1a1a2e;
+            --word-count-text: #8a8aaa;
+            --rating-locked: #2ecc71;
+            --review-correct: #2ecc71;
+            --review-wrong: #e74c3c;
+            --review-bg: #1a1a2e;
+            --error-box-bg: #2e0a0a;
+            --error-box-text: #e74c3c;
+            --nav-link-color: #a8a8c0;
+            --nav-link-hover: #e8e8f0;
+            --btn-pdf-bg: #c0392b;
+            --btn-pdf-hover: #e74c3c;
+        }
+
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg-primary); color: var(--text-primary); transition: background 0.3s ease, color 0.3s ease; }
+        
+        /* ===== NAVBAR - NO UNDERLINE ===== */
+        .navbar-custom { 
+            background: var(--bg-nav); 
+            backdrop-filter: blur(16px); 
+            padding: 12px 0; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 2px solid rgba(108,99,255,0.06);
+            transition: background 0.3s ease;
+            min-height: 64px;
+        }
+        .navbar-custom .brand { 
+            font-weight: 800; 
+            font-size: 1.2rem; 
+            color: var(--text-primary); 
+            transition: 0.3s;
+            text-decoration: none !important;
+        }
+        .navbar-custom .brand:hover { color: #6C63FF; }
+        .navbar-custom .brand i { color: #6C63FF; margin-right: 8px; }
+        
+        .nav-links { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .nav-links a { 
+            padding: 8px 16px; 
+            border-radius: 10px; 
+            font-weight: 500; 
+            font-size: 0.85rem; 
+            color: var(--nav-link-color); 
+            transition: 0.3s; 
+            text-decoration: none !important;
+        }
+        .nav-links a:hover { background: rgba(108,99,255,0.08); color: var(--nav-link-hover); }
+        .nav-links a i { margin-right: 6px; }
+        .nav-links a.active { background: rgba(108,99,255,0.08); color: #6C63FF; }
+        
+        .btn-upload-nav { 
+            background: linear-gradient(135deg, #6C63FF, #4A47B0) !important; 
+            color: white !important; 
+            padding: 8px 20px !important; 
+            border-radius: 12px !important; 
+            font-weight: 600 !important; 
+            transition: all 0.3s ease !important; 
+            border: none !important;
+            font-size: 0.85rem !important;
+            text-decoration: none !important;
+        }
+        .btn-upload-nav:hover { 
+            transform: translateY(-2px) !important; 
+            box-shadow: 0 4px 16px rgba(108,99,255,0.25) !important; 
+            background: linear-gradient(135deg, #5a52d5, #3a37a0) !important; 
+            color: white !important;
+            text-decoration: none !important;
+        }
+        
+        .dark-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: rgba(108,99,255,0.06);
+            transition: 0.3s;
+            border: none;
+            color: var(--nav-link-color);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-decoration: none !important;
+        }
+        .dark-toggle:hover { background: rgba(108,99,255,0.12); }
+        .dark-toggle .toggle-icon { font-size: 1.1rem; }
+        .dark-toggle .toggle-text { font-size: 0.7rem; }
+        
+        .btn-back-nav { 
+            background: transparent; 
+            border: 2px solid var(--border-color); 
+            padding: 4px 12px !important; 
+            border-radius: 8px !important; 
+            font-weight: 500 !important; 
+            transition: all 0.3s !important; 
+            color: var(--text-secondary);
+            font-size: 0.8rem !important;
+            text-decoration: none !important;
+        }
+        .btn-back-nav:hover { border-color: #6C63FF; color: #6C63FF; background: rgba(108,99,255,0.04); }
+        
+        .note-card { 
+            background: var(--bg-card); 
+            border-radius: 20px; 
+            padding: 32px; 
+            box-shadow: var(--shadow); 
+            max-width: 820px; 
+            margin: 0 auto; 
+            border: 2px solid var(--border-color); 
+            transition: all 0.3s ease;
+        }
+        .note-card:hover { border-color: var(--border-hover); }
+        .note-card h2 { font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; color: var(--text-primary); margin-bottom: 4px; }
+        
+        .btn-primary { 
+            background: linear-gradient(135deg, #6C63FF, #4A47B0); 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 10px; 
+            font-weight: 600; 
+            transition: all 0.3s; 
+            color: white; 
+            font-size: 0.85rem;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(108,99,255,0.25); color: white; }
+        
+        .btn-pdf { 
+            background: var(--btn-pdf-bg) !important; 
+            border: none !important; 
+            padding: 10px 20px !important; 
+            border-radius: 10px !important; 
+            font-weight: 600 !important; 
+            transition: all 0.3s ease !important; 
+            color: white !important; 
+            font-size: 0.9rem !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            width: 100% !important;
+            justify-content: center !important;
+        }
+        .btn-pdf:hover { transform: translateY(-2px) !important; box-shadow: 0 4px 16px rgba(220,53,69,0.3) !important; background: var(--btn-pdf-hover) !important; color: white !important; }
+        .btn-pdf i { font-size: 1.2rem; }
+        
+        .rating-action-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        .rating-section { flex: 1; min-width: 200px; }
+        .action-section { flex: 0 0 auto; min-width: 160px; display: flex; flex-direction: column; justify-content: center; }
+        
+        .rating-btn { font-size: 1.6rem; cursor: pointer; transition: all 0.2s; padding: 3px; }
+        .rating-btn:hover { transform: scale(1.2); }
+        .rating-btn.selected { color: #f39c12; }
+        .rating-btn:not(.selected) { color: #e0e0e0; }
+        .rating-btn.disabled { cursor: not-allowed; opacity: 0.6; }
+        .rating-btn.disabled:hover { transform: none; }
+        
+        .key-point-item { 
+            padding: 10px 14px; 
+            border-bottom: 1px solid var(--border-color); 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 10px; 
+            transition: 0.3s; 
+            border-radius: 8px; 
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        .key-point-item:hover { background: var(--keypoint-hover); }
+        .key-point-item:last-child { border-bottom: none; }
+        .key-point-item .num { 
+            color: white; 
+            border-radius: 50%; 
+            width: 24px; 
+            height: 24px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 0.6rem; 
+            font-weight: 700; 
+            flex-shrink: 0; 
+            margin-top: 2px;
+        }
+        .key-point-item .num.important { background: #2ecc71; }
+        .key-point-item .num.moderate { background: #f39c12; }
+        .key-point-item .num.less { background: #e74c3c; }
+        
+        .badge-modern { 
+            padding: 3px 10px; 
+            border-radius: 20px; 
+            font-weight: 500; 
+            font-size: 0.65rem; 
+            display: inline-block; 
+        }
+        .badge-modern.tag { background: var(--badge-tag); color: var(--badge-tag-text); }
+        .badge-modern.course { background: var(--badge-course); color: var(--badge-course-text); }
+        .badge-modern.views { background: var(--badge-views); color: var(--badge-views-text); }
+        .badge-modern.downloads { background: var(--badge-downloads); color: var(--badge-downloads-text); }
+        .badge-modern.downloaded { background: var(--badge-downloaded); color: var(--badge-downloaded-text); }
+        
+        .badge-detail {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+        .badge-detail i { font-size: 0.8rem; }
+        .badge-difficulty-beginner { background: #d4edda; color: #155724; border-color: #c3e6cb; }
+        .badge-difficulty-intermediate { background: #fff3cd; color: #856404; border-color: #ffc107; }
+        .badge-difficulty-advanced { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+        .badge-difficulty-expert { background: #e8daef; color: #6c3483; border-color: #d7bde2; }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .detail-item i { color: #6C63FF; font-size: 0.9rem; }
+        .detail-item .label { font-weight: 500; color: var(--text-muted); }
+        .detail-item .value { color: var(--text-primary); }
+        
+        .footer { 
+            background: var(--footer-bg); 
+            color: var(--footer-text); 
+            padding: 30px 0; 
+            margin-top: 40px; 
+            text-align: center; 
+            border-top: 1px solid #2a2a4e; 
+            transition: background 0.3s ease;
+        }
+        .footer p { font-size: 0.85rem; margin-bottom: 4px; }
+        .footer a { color: #6C63FF; transition: 0.3s; text-decoration: none; }
+        .footer a:hover { color: #8a7fff; }
+        
+        .loading { text-align: center; padding: 40px; }
+        .loading .spinner { width: 30px; height: 30px; border: 3px solid var(--border-color); border-top: 3px solid #6C63FF; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .rating-info { font-size: 0.8rem; color: var(--text-muted); }
+        .rating-locked { color: var(--rating-locked); font-weight: 600; font-size: 0.8rem; }
+        .summary-text { font-size: 0.95rem; line-height: 1.7; color: var(--text-primary); }
+        .rating-average { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); }
+        .rating-average .small { font-size: 0.8rem; font-weight: 400; color: var(--text-muted); }
+        .rating-stars-display { font-size: 1.1rem; }
+        .word-count { 
+            background: var(--word-count-bg); 
+            padding: 4px 12px; 
+            border-radius: 8px; 
+            font-size: 0.7rem; 
+            color: var(--word-count-text); 
+            display: inline-block;
+        }
+        
+        .error-box { background: var(--error-box-bg); color: var(--error-box-text); padding: 16px; border-radius: 10px; margin: 16px 0; border: 1px solid var(--error-box-bg); font-size: 0.9rem; }
+        
+        .objectives-list { padding-left: 20px; margin-top: 4px; }
+        .objectives-list li { margin-bottom: 2px; font-size: 0.9rem; color: var(--text-secondary); }
+        .prereq-text { font-size: 0.9rem; color: var(--text-secondary); font-style: italic; }
+        
+        @media (max-width: 768px) {
+            .note-card { padding: 20px; }
+            .note-card h2 { font-size: 1.3rem; }
+            .rating-btn { font-size: 1.4rem; }
+            .nav-links a { font-size: 0.8rem; padding: 6px 12px; }
+            .navbar-custom .brand { font-size: 1rem; }
+            .dark-toggle .toggle-text { display: none; }
+            .btn-back-nav { font-size: 0.7rem !important; padding: 4px 10px !important; }
+            .key-point-item { font-size: 0.85rem; padding: 8px 12px; }
+            .summary-text { font-size: 0.9rem; }
+            .btn-pdf { font-size: 0.8rem !important; padding: 8px 16px !important; }
+            .rating-action-section { flex-direction: column; gap: 16px; }
+            .action-section { min-width: 100%; }
+            .btn-pdf { width: 100% !important; }
+            .detail-grid { grid-template-columns: 1fr 1fr; }
+        }
+        
+        @media (max-width: 480px) {
+            .note-card { padding: 16px; }
+            .note-card h2 { font-size: 1.1rem; }
+            .rating-btn { font-size: 1.2rem; }
+            .nav-links a { font-size: 0.7rem; padding: 4px 10px; }
+            .navbar-custom .brand { font-size: 0.85rem; }
+            .dark-toggle { padding: 3px 8px; font-size: 0.65rem; }
+            .btn-back-nav { font-size: 0.6rem !important; padding: 3px 8px !important; }
+            .key-point-item { font-size: 0.8rem; padding: 6px 10px; }
+            .key-point-item .num { width: 20px; height: 20px; font-size: 0.5rem; }
+            .summary-text { font-size: 0.85rem; }
+            .badge-modern { font-size: 0.55rem; padding: 2px 8px; }
+            .word-count { font-size: 0.6rem; padding: 3px 8px; }
+            .btn-pdf { font-size: 0.7rem !important; padding: 6px 12px !important; }
+            .btn-pdf i { font-size: 0.9rem; }
+            .detail-grid { grid-template-columns: 1fr; }
+            .detail-item { font-size: 0.75rem; padding: 4px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar-custom">
+    <div class="container d-flex justify-content-between align-items-center">
+        <a href="index.html" class="brand"><i class="bi bi-mortarboard-fill"></i> USP Notes</a>
+        <div class="nav-links">
+            <a href="index.html"><i class="bi bi-house"></i> Home</a>
+            <a href="mylearning.html"><i class="bi bi-brain"></i> My Learning</a>
+            <a href="leaderboard.html"><i class="bi bi-trophy"></i> Leaderboard</a>
+            <button class="dark-toggle" onclick="toggleDarkMode()" id="darkToggle">
+                <span class="toggle-icon" id="toggleIcon">🌙</span>
+                <span class="toggle-text" id="toggleText">Dark</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-3">
+    <div id="noteContainer">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p style="color: var(--text-muted); font-size:0.9rem;">Loading note...</p>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2026 USP Notes Marketplace · Made with ❤️ for USP students</p>
+    </div>
+</footer>
+
+<script>
+const API_URL = 'http://localhost:5000';
+const urlParams = new URLSearchParams(window.location.search);
+const noteId = urlParams.get('id');
+
+// ===== DARK MODE =====
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateToggleIcon(newTheme);
+}
+
+function updateToggleIcon(theme) {
+    const icon = document.getElementById('toggleIcon');
+    const text = document.getElementById('toggleText');
+    if (theme === 'dark') { icon.textContent = '☀️'; text.textContent = 'Light'; } 
+    else { icon.textContent = '🌙'; text.textContent = 'Dark'; }
+}
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateToggleIcon(savedTheme);
+}
+
+if (!noteId) {
+    document.getElementById('noteContainer').innerHTML = `
+        <div class="note-card text-center">
+            <h3 style="color: var(--text-primary);">❌ No note selected</h3>
+            <a href="index.html" class="btn btn-primary mt-3">Go Back</a>
+        </div>
+    `;
+} else {
+    const viewedKey = 'viewed_note_' + noteId;
+    const alreadyViewed = localStorage.getItem(viewedKey);
+    loadNote(noteId, !alreadyViewed);
+    localStorage.setItem(viewedKey, 'true');
+}
+
+async function loadNote(noteId, incrementView = false) {
+    try {
+        const response = await fetch(API_URL + `/api/notes/${noteId}`);
+        if (!response.ok) throw new Error(`Note not found (Status: ${response.status})`);
+        const note = await response.json();
+        displayNote(note);
+        if (incrementView) {
+            await fetch(API_URL + `/api/notes/${noteId}/view`, { method: 'POST' });
+        }
+    } catch (error) {
+        document.getElementById('noteContainer').innerHTML = `
+            <div class="note-card">
+                <div class="error-box">
+                    <h5 style="color: var(--error-box-text);"><i class="bi bi-exclamation-triangle"></i> Error Loading Note</h5>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <button onclick="loadNote('${noteId}', false)" class="btn btn-primary btn-sm mt-2">Retry</button>
+                    <a href="index.html" class="btn btn-outline-secondary btn-sm mt-2 ms-2">Go Back</a>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function displayNote(note) {
+    const container = document.getElementById('noteContainer');
+    const tags = note.tags || [];
+    const tagHtml = tags.map(t => `<span class="badge-modern tag me-1">#${t}</span>`).join('');
+    const downloaded = JSON.parse(localStorage.getItem('downloaded_notes') || '[]');
+    const isDownloaded = downloaded.includes(note.note_id);
+    
+    const levels = ['important', 'important', 'moderate', 'moderate', 'less'];
+    let keyPointsHtml = '';
+    if (note.key_points && note.key_points.length > 0) {
+        keyPointsHtml = note.key_points.map((k, i) => {
+            const level = levels[i % levels.length];
+            return `
+                <div class="key-point-item">
+                    <span class="num ${level}">${i+1}</span>
+                    <span>${k}</span>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    const userRating = localStorage.getItem('rating_' + noteId);
+    const hasRated = userRating !== null;
+    const avgRating = note.rating || 0;
+    const ratingCount = note.rating_count || 0;
+    
+    const difficulty = note.difficulty_level || 'intermediate';
+    const diffClass = {
+        'beginner': 'badge-difficulty-beginner',
+        'intermediate': 'badge-difficulty-intermediate',
+        'advanced': 'badge-difficulty-advanced',
+        'expert': 'badge-difficulty-expert'
+    }[difficulty] || 'badge-difficulty-intermediate';
+    const diffLabel = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+    
+    let publishDate = 'Not set';
+    if (note.upload_date) {
+        try {
+            const date = new Date(note.upload_date);
+            if (!isNaN(date.getTime())) {
+                publishDate = date.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+        } catch(e) {}
+    }
+    
+    let objectivesHtml = '';
+    if (note.learning_objectives) {
+        const objectives = note.learning_objectives.split('\n').filter(o => o.trim());
+        if (objectives.length > 0) {
+            objectivesHtml = `<ul class="objectives-list">${objectives.map(o => `<li>${o.trim()}</li>`).join('')}</ul>`;
+        } else {
+            objectivesHtml = `<p class="prereq-text">${note.learning_objectives}</p>`;
+        }
+    }
+    
+    container.innerHTML = `
+        <div class="note-card">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                <h2>${note.title || 'Untitled'}</h2>
+                <span class="badge-modern course">${note.course_code || 'N/A'}</span>
+            </div>
+            
+            <div class="mt-2">
+                ${tagHtml}
+                <span class="badge-modern views"><i class="bi bi-eye"></i> ${note.views || 0}</span>
+                <span class="badge-modern downloads"><i class="bi bi-download"></i> ${note.downloads || 0}</span>
+                ${isDownloaded ? '<span class="badge-modern downloaded"><i class="bi bi-check-circle-fill"></i> Downloaded</span>' : ''}
+                <span class="word-count ms-2"><i class="bi bi-file-text"></i> ${note.word_count || 0} words</span>
+            </div>
+            
+            ${note.description ? `<p class="text-muted mt-2" style="color: var(--text-muted); font-size:0.9rem;">${note.description}</p>` : ''}
+            <hr style="border-color: var(--border-color);">
+            
+            <div class="detail-grid">
+                ${note.reading_time ? `
+                    <div class="detail-item">
+                        <i class="bi bi-clock"></i>
+                        <span class="label">Reading Time:</span>
+                        <span class="value">${note.reading_time} min</span>
+                    </div>
+                ` : ''}
+                ${difficulty ? `
+                    <div class="detail-item">
+                        <i class="bi bi-bar-chart"></i>
+                        <span class="label">Difficulty:</span>
+                        <span class="value"><span class="badge-detail ${diffClass}">${diffLabel}</span></span>
+                    </div>
+                ` : ''}
+                ${publishDate !== 'Not set' ? `
+                    <div class="detail-item">
+                        <i class="bi bi-calendar"></i>
+                        <span class="label">Published:</span>
+                        <span class="value">${publishDate}</span>
+                    </div>
+                ` : ''}
+                ${note.prerequisites ? `
+                    <div class="detail-item" style="grid-column: 1 / -1;">
+                        <i class="bi bi-bookmark-check"></i>
+                        <span class="label">Prerequisites:</span>
+                        <span class="value">${note.prerequisites}</span>
+                    </div>
+                ` : ''}
+            </div>
+            
+            ${note.learning_objectives ? `
+                <div style="margin: 8px 0 12px 0;">
+                    <span style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);">
+                        <i class="bi bi-bullseye" style="color: #6C63FF;"></i> Learning Objectives:
+                    </span>
+                    ${objectivesHtml}
+                </div>
+            ` : ''}
+            
+            <hr style="border-color: var(--border-color);">
+            
+            <h5 class="fw-bold" style="color: var(--text-primary); font-size:1.05rem;">📝 Summary</h5>
+            <p class="summary-text">${note.summary || 'No summary available.'}</p>
+            
+            <h5 class="fw-bold mt-3" style="color: var(--text-primary); font-size:1.05rem;">🎯 Key Points</h5>
+            <div style="background: var(--keypoint-hover);border-radius:10px;padding:4px;">
+                ${keyPointsHtml || '<p class="text-muted p-3" style="color: var(--text-muted); font-size:0.9rem;">No key points extracted.</p>'}
+            </div>
+            <div style="font-size:0.65rem;color:var(--text-muted);margin-top:6px;display:flex;gap:12px;flex-wrap:wrap;">
+                <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#2ecc71;"></span> Critical</span>
+                <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f39c12;"></span> Important</span>
+                <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#e74c3c;"></span> Supplementary</span>
+            </div>
+            
+            <hr style="border-color: var(--border-color);">
+            
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div>
+                    <span class="rating-average">
+                        ${avgRating > 0 ? avgRating.toFixed(1) : '0.0'} <span class="small">/ 5.0</span>
+                    </span>
+                    <span class="rating-stars-display" style="margin-left:6px;">
+                        ${'⭐'.repeat(Math.round(avgRating))}${'☆'.repeat(5 - Math.round(avgRating))}
+                    </span>
+                    <span class="rating-info">(${ratingCount} ratings)</span>
+                </div>
+                <span class="text-muted small" style="color: var(--text-muted); font-size:0.7rem;">Uploaded: ${publishDate}</span>
+            </div>
+            
+            <div class="rating-action-section">
+                <div class="rating-section">
+                    <h6 class="fw-bold" style="color: var(--text-primary); font-size:0.9rem; margin-bottom:6px;">⭐ Rate this note:</h6>
+                    <div id="ratingButtons" class="d-flex gap-1 align-items-center flex-wrap">
+                        ${[1,2,3,4,5].map(i => `
+                            <span class="rating-btn ${hasRated && parseInt(userRating) === i ? 'selected' : ''} ${hasRated ? 'disabled' : ''}" 
+                                  onclick="${hasRated ? '' : `rateNote(${i})`}" 
+                                  id="star${i}" 
+                                  data-value="${i}"
+                                  style="${hasRated ? 'cursor: default;' : ''}">
+                                ⭐
+                            </span>
+                        `).join('')}
+                        ${hasRated ? `<span class="rating-locked ms-2"><i class="bi bi-check-circle-fill"></i> You rated this ${userRating} star${userRating > 1 ? 's' : ''}</span>` : ''}
+                    </div>
+                    <div id="ratingMsg" class="mt-1" style="font-size:0.85rem;color:var(--text-muted);">
+                        ${hasRated ? '' : 'Tap a star to rate this note'}
+                    </div>
+                </div>
+                <div class="action-section">
+                    <button class="btn-pdf" onclick="exportPDF('${noteId}')">
+                        <i class="bi bi-filetype-pdf"></i> Export PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// ===== EXPORT PDF =====
+async function exportPDF(noteId) {
+    try {
+        const response = await fetch(API_URL + `/api/notes/${noteId}`);
+        const note = await response.json();
+        
+        const container = document.getElementById('pdfContentInner');
+        
+        let keyPointsHtml = '';
+        if (note.key_points && note.key_points.length > 0) {
+            keyPointsHtml = note.key_points.map((k, i) => `
+                <div style="padding: 10px 0; border-bottom: 1px solid #f0f0f5; display: flex; align-items: flex-start; gap: 12px;">
+                    <span style="background: #6C63FF; color: white; border-radius: 50%; min-width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700;">${i+1}</span>
+                    <span style="font-size: 0.95rem; line-height: 1.6;">${k}</span>
+                </div>
+            `).join('');
+        }
+        
+        const tags = note.tags || [];
+        const tagHtml = tags.map(t => `<span style="background: #eeedff; color: #6C63FF; padding: 2px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 500; margin-right: 4px;">#${t}</span>`).join('');
+        
+        const date = new Date(note.upload_date).toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        const stars = '⭐'.repeat(Math.round(note.rating || 0)) + '☆'.repeat(5 - Math.round(note.rating || 0));
+        
+        const difficulty = note.difficulty_level || 'intermediate';
+        const diffLabel = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+        
+        // Learning Objectives
+        let objectivesText = note.learning_objectives || 'Not specified';
+        
+        container.innerHTML = `
+            <div style="text-align: center; padding: 30px 0 20px; border-bottom: 3px solid #6C63FF; margin-bottom: 30px;">
+                <div style="font-size: 32px; margin-bottom: 4px;">📚</div>
+                <h1 style="color: #6C63FF; font-weight: 800; font-size: 26px; margin: 0; letter-spacing: -0.5px;">USP Notes Marketplace</h1>
+                <p style="color: #6a6a8a; margin: 4px 0 0; font-size: 13px;">Study Guide · AI-Generated Summary</p>
+            </div>
+            
+            <div style="margin-bottom: 24px;">
+                <h2 style="font-weight: 800; font-size: 24px; margin: 0 0 6px 0; color: #1a1a2e; letter-spacing: -0.5px;">${note.title || 'Untitled Note'}</h2>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+                    <span style="background: #1a1a2e; color: white; padding: 2px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">${note.course_code || 'N/A'}</span>
+                    ${tagHtml}
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; background: #f8f9fa; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; font-size: 0.85rem; color: #4a4a6a; border: 1px solid #f0f0f5;">
+                ${note.reading_time ? `<div><span style="font-weight: 600;">⏱️ Reading Time:</span> ${note.reading_time} min</div>` : ''}
+                <div><span style="font-weight: 600;">📊 Difficulty:</span> ${diffLabel}</div>
+                <div><span style="font-weight: 600;">📅 Published:</span> ${date}</div>
+                ${note.prerequisites ? `<div style="grid-column: 1 / -1;"><span style="font-weight: 600;">📋 Prerequisites:</span> ${note.prerequisites}</div>` : ''}
+                <div><span style="font-weight: 600;">👁️ Views:</span> ${note.views || 0}</div>
+                <div><span style="font-weight: 600;">⬇️ Downloads:</span> ${note.downloads || 0}</div>
+                <div><span style="font-weight: 600;">⭐ Rating:</span> ${stars} (${note.rating_count || 0})</div>
+                <div><span style="font-weight: 600;">📄 Words:</span> ${note.word_count || 0}</div>
+            </div>
+            
+            ${note.description ? `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-weight: 700; font-size: 16px; color: #1a1a2e; border-bottom: 2px solid #f0f0f5; padding-bottom: 6px;">📖 Description</h3>
+                    <p style="color: #4a4a6a; font-size: 0.95rem; line-height: 1.7; margin-top: 6px;">${note.description}</p>
+                </div>
+            ` : ''}
+            
+            ${note.learning_objectives ? `
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-weight: 700; font-size: 16px; color: #1a1a2e; border-bottom: 2px solid #f0f0f5; padding-bottom: 6px;">🎯 Learning Objectives</h3>
+                    <p style="color: #4a4a6a; font-size: 0.95rem; line-height: 1.7; margin-top: 6px;">${note.learning_objectives}</p>
+                </div>
+            ` : ''}
+            
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-weight: 700; font-size: 18px; color: #1a1a2e; border-bottom: 2px solid #6C63FF; padding-bottom: 8px;">📝 Comprehensive Summary</h3>
+                <div style="background: #f8f9fe; padding: 20px; border-radius: 8px; margin-top: 8px; border-left: 4px solid #6C63FF;">
+                    <p style="color: #1a1a2e; font-size: 1rem; line-height: 1.8; margin: 0;">${note.summary || 'No summary available.'}</p>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-weight: 700; font-size: 18px; color: #1a1a2e; border-bottom: 2px solid #2ecc71; padding-bottom: 8px;">🎯 Key Points</h3>
+                <div style="background: #fafafe; border-radius: 8px; padding: 4px; margin-top: 8px; border: 1px solid #f0f0f5;">
+                    ${keyPointsHtml || '<p style="color: #6a6a8a; padding: 16px; margin: 0;">No key points extracted.</p>'}
+                </div>
+            </div>
+            
+            <div style="margin-top: 32px; padding-top: 16px; border-top: 2px solid #f0f0f5; text-align: center; font-size: 0.75rem; color: #8a8aaa;">
+                <p style="margin: 0;">Generated by <strong style="color: #6C63FF;">USP Notes Marketplace</strong></p>
+                <p style="margin: 2px 0 0;">Downloaded on: ${new Date().toLocaleString()}</p>
+                <p style="margin: 4px 0 0;">© 2026 USP Notes Marketplace · Study Smarter, Not Harder</p>
+            </div>
+        `;
+        
+        document.getElementById('pdfContent').style.display = 'block';
+        
+        const element = document.getElementById('pdfWrapper');
+        const opt = {
+            margin: [0.5, 0.5, 0.5, 0.5],
+            filename: `${note.title || 'note'}_${note.note_id}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+        
+        await html2pdf().set(opt).from(element).save();
+        
+        document.getElementById('pdfContent').style.display = 'none';
+        
+        const downloaded = JSON.parse(localStorage.getItem('downloaded_notes') || '[]');
+        if (!downloaded.includes(noteId)) {
+            downloaded.push(noteId);
+            localStorage.setItem('downloaded_notes', JSON.stringify(downloaded));
+        }
+        await fetch(API_URL + `/api/notes/${noteId}/download`, { method: 'POST' });
+        
+    } catch (error) {
+        alert('Error generating PDF: ' + error.message);
+        console.error('PDF Error:', error);
+    }
+}
+
+async function rateNote(rating) {
+    if (localStorage.getItem('rating_' + noteId)) {
+        document.getElementById('ratingMsg').innerHTML = '<span class="rating-locked"><i class="bi bi-check-circle-fill"></i> You already rated this.</span>';
+        return;
+    }
+    try {
+        const response = await fetch(API_URL + `/api/notes/${noteId}/rate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ rating })
+        });
+        const result = await response.json();
+        if (result.success) {
+            localStorage.setItem('rating_' + noteId, rating);
+            for (let i = 1; i <= 5; i++) {
+                const star = document.getElementById('star' + i);
+                star.classList.toggle('selected', i <= rating);
+                star.classList.add('disabled');
+                star.onclick = null;
+            }
+            document.getElementById('ratingMsg').innerHTML = `<span class="rating-locked"><i class="bi bi-check-circle-fill"></i> You rated this ${rating} star${rating > 1 ? 's' : ''}</span>`;
+            setTimeout(() => loadNote(noteId, false), 1000);
+        } else {
+            document.getElementById('ratingMsg').innerHTML = '❌ ' + (result.error || 'Rating failed');
+        }
+    } catch (error) {
+        document.getElementById('ratingMsg').innerHTML = '❌ Connection error: ' + error.message;
+    }
+}
+
+// PDF Content container (hidden)
+document.write(`
+    <div id="pdfContent" style="display: none;">
+        <div id="pdfWrapper" style="padding: 48px; max-width: 800px; margin: 0 auto; font-family: 'Inter', 'Segoe UI', Arial, sans-serif; background: white; color: #1a1a2e; line-height: 1.7;">
+            <div id="pdfContentInner"></div>
+        </div>
+    </div>
+`);
+
+loadTheme();
+</script>
+</body>
+</html>
